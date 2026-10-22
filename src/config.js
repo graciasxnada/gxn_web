@@ -32,19 +32,19 @@ export const BAND = {
 export const LINKS = {
   spotify: 'https://open.spotify.com/artist/4PU43GQny4NK07FvQ3VLGs',
   instagram: 'https://www.instagram.com/graciasxnada_/',
+  appleMusic: 'https://music.apple.com/us/artist/gracias-x-nada/6778918504',
+  youtube: 'https://www.youtube.com/@graciasxnadagxn',
   spotifyHandle: 'gracias x nada',
   instagramHandle: '@graciasxnada_',
 };
 
 /**
- * Contacto. No se publica ninguna dirección inventada:
- * mientras CONTACT.email sea null, la web dirige a Instagram (canal real).
+ * Contacto.
  */
 export const CONTACT = {
-  email: null, // ⚠️ pendiente: e-mail real (se publicará como mailto cuando exista)
+  email: 'graciasxnadagrupo@gmail.com',
   booking: 'Booking, salas y promotores',
   press: 'Prensa, radios y colaboraciones',
-  note: 'Para booking, prensa y cualquier otra cosa, escríbenos por Instagram o al correo cuando esté disponible.',
 };
 
 /** Press kit (disponible bajo petición hasta que exista archivo real) */

@@ -7,6 +7,7 @@ import { LINKS } from '../config.js';
 import { featuredRelease, releases, releaseTypeLabel, formatDate } from '../data/releases.js';
 import { upcoming, past } from '../data/shows.js';
 import { href } from '../lib.js';
+import banner from '../assets/img/banner.webp';
 import bandFoto from '../assets/img/band-foto.webp';
 
 const next = upcoming[0];
@@ -17,8 +18,8 @@ const nextShow = next ?? null;
   <section class="hero">
     <div class="hero__bg">
       <img
-        src={bandFoto.src}
-        alt="Los tres integrantes de gracias x nada posando con una patineta bajo una rampa de skate"
+        src={banner.src}
+        alt="gracias x nada, de pie sobre una tabla en el skatepark de Vigo, retrato panorámico"
         fetchpriority="high"
         decoding="async"
       />
@@ -110,7 +111,7 @@ const nextShow = next ?? null;
         </p>
       </div>
       <figure style="margin: 0">
-        <img src={bandFoto.src} alt="gracias x nada, retrato en fisheye junto a una rampa de skate" loading="lazy" decoding="async" width="640" height="640" />
+        <img src={bandFoto.src} alt="gracias x nada, retrato en fisheye junto a una rampa de skate en Vigo" loading="lazy" decoding="async" width="1500" height="844" />
         <figcaption class="mono" style="margin-top: 0.6rem; opacity: 0.8">Vigo · GxN</figcaption>
       </figure>
     </div>

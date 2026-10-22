@@ -8,6 +8,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { SITE, BAND, LINKS } from '../config.js';
+import bandFotoImport from '../assets/img/band-foto.webp';
 
 const { title, description, isHome = false } = Astro.props;
 
@@ -32,8 +33,8 @@ const bandJsonLd = {
   foundingDate: BAND.formed,
   foundingLocation: { '@type': 'Place', name: BAND.origin },
   url: baseUrl.href,
-  image: new URL('band-foto.webp', baseUrl).href,
-  sameAs: [LINKS.spotify, LINKS.instagram],
+  image: new URL(bandFotoImport.src, siteUrl).href,
+  sameAs: [LINKS.spotify, LINKS.instagram, LINKS.appleMusic, LINKS.youtube],
 };
 
 const asset = (file) => new URL(file, baseUrl).href;

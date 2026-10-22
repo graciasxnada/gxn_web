@@ -23,21 +23,12 @@ import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases.
     <div class="contact-blocks">
       <div class="contact-card">
         <h3>{CONTACT.booking}</h3>
-        {CONTACT.email ? (
-          <p class="mono"><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p>
-        ) : (
-          <p class="mono">
-            Ahora mismo el canal directo es Instagram:
-            <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">{LINKS.instagramHandle} ↗</a>
-            <br />(cuando exista e-mail de booking, se publicará aquí)
-          </p>
-        )}
+        <p class="mono"><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p>
       </div>
       <div class="contact-card">
         <h3>{CONTACT.press}</h3>
         <p class="mono">
-          Pide el press kit por Instagram:
-          <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">{LINKS.instagramHandle} ↗</a>
+          Prensa: <a href={`mailto:${CONTACT.email}?subject=Prensa%20gracias%20x%20nada`}>{CONTACT.email}</a>
         </p>
         {PRESS.kitFile ? (
           <p><a class="sticker sticker--red" href={PRESS.kitFile} download>Descargar press kit ↓</a></p>
@@ -49,6 +40,8 @@ import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases.
         <h3>Redes</h3>
         <ul class="mono" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem">
           <li><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a></li>
+          <li><a href={LINKS.appleMusic} target="_blank" rel="noopener noreferrer">Apple Music ↗</a></li>
+          <li><a href={LINKS.youtube} target="_blank" rel="noopener noreferrer">YouTube ↗</a></li>
           <li><a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
         </ul>
       </div>

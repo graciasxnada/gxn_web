@@ -1,5 +1,6 @@
 /**
- * Conciertos — solo fechas verificadas en prensa (roucoson.com) y cartel de sala.
+ * Conciertos — fechas facilitadas por la banda y verificaciones de prensa
+ * (roucoson.com / carteles).
  *
  * Para añadir una fecha nueva: añade un objeto a `upcoming` o `past`.
  *   date: '2026-07-22' — { date, venue, city, notes }
@@ -9,10 +10,38 @@
  */
 
 export const upcoming = [
-  // ⚠️ pendiente: no hay fechas futuras publicadas. El estado vacío las anuncia.
+  {
+    date: '2026-11-13',
+    datePrecision: 'day',
+    venue: 'Sala Moon',
+    city: 'Santiago de Compostela',
+    notes: 'con Martes Mal y Fuego Lolita',
+    ticketUrl: null, // ⚠️ añadido cuando exista venta
+  },
 ];
 
 export const past = [
+  {
+    date: '2026-08-28',
+    datePrecision: 'day',
+    venue: 'Chiringo do Mundo',
+    city: 'Liméns',
+    notes: 'con Ruen y Dioivo',
+  },
+  {
+    date: '2026-08-27',
+    datePrecision: 'day',
+    venue: 'Ocean Rock Bar',
+    city: 'Vigo',
+    notes: 'con Five Star Service and the Black-Suited Ladies',
+  },
+  {
+    date: '2026-08-14',
+    datePrecision: 'day',
+    venue: 'Ocean Rock Bar',
+    city: 'Vigo',
+    notes: 'con Martes Mal',
+  },
   {
     date: '2026-07-22',
     datePrecision: 'day',

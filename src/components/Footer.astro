@@ -32,12 +32,16 @@ const year = new Date().getFullYear();
       <h3 class="kicker" style="color: var(--yellow)">Redes y contacto</h3>
       <ul>
         <li><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a></li>
+        <li><a href={LINKS.appleMusic} target="_blank" rel="noopener noreferrer">Apple Music ↗</a></li>
+        <li><a href={LINKS.youtube} target="_blank" rel="noopener noreferrer">YouTube ↗</a></li>
         <li><a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
         <li><a href={href('/contacto/')}>Contacto y prensa</a></li>
       </ul>
-      <p class="mono" style="margin-top: 0.8rem">
-        {CONTACT.email ? `Booking · ${CONTACT.email}` : CONTACT.note}
-      </p>
+      {CONTACT.email && (
+        <p class="mono" style="margin-top: 0.8rem">
+          Booking · <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+        </p>
+      )}
     </div>
   </div>
   <div class="footer__bottom">

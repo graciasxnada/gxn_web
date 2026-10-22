@@ -81,12 +81,14 @@ local Rouco Son): discografía completa con fechas y duraciones, créditos
 de grabación (deica), colaboraciones (kinss, deica), salas de conciertos
 pasados, Twitter/Instagram/Spotify oficiales.
 
+- [x] E-mail de booking/prensa: `graciasxnadagrupo@gmail.com` (config en `CONTACT.email`)
+- [x] Foto de banda real (banner de Spotify → hero; fisheye → sobre) y portadas reales
+- [x] Apple Music y YouTube (enlaces de artista) — añadir enlaces por lanzamiento si existen
+
 **Pendiente de aportar por la banda** (marcado con ⚠️ en el código):
 
 - [ ] Dominio propio (sustituir `SITE.url`/`base` + `robots.txt`).
-- [ ] E-mail de booking/prensa (`CONTACT.email`) — hoy todo va a Instagram.
 - [ ] Press kit PDF (`PRESS.kitFile`).
-- [ ] Más fotos reales de la banda (hoy: la imagen de perfil de Spotify).
-- [ ] Enlaces a Apple Music / YouTube / Bandcamp si existen.
+- [ ] Enlaces de Apple Music/YouTube por lanzamiento concreto.
 - [ ] Ficha técnica de directo (rider, formación) para prensa.
-- [ ] Próximas fechas de conciertos.
+- [ ] Más fotos y entradas de venta (`ticketUrl`) por concierto.
