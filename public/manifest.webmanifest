@@ -1,0 +1,13 @@
+{
+  "name": "gracias x nada",
+  "short_name": "GxN",
+  "description": "Pop punk y skate punk desde Vigo, Galicia.",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#2fae4a",
+  "theme_color": "#2fae4a"
+}

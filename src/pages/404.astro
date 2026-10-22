@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Starburst from '../components/Starburst.astro';
+import { href } from '../lib.js';
+---
+
+<Base title="Página no encontrada" description="Error 404: esta página de gracias x nada no existe.">
+  <section class="section wrap" style="text-align: center; min-height: 60vh; display: grid; align-content: center">
+    <Starburst class="" style="width: 90px; margin: 0 auto 1rem" />
+    <p class="kicker">Error 404</p>
+    <h1 style="font-size: clamp(2.6rem, 8vw, 5rem)">Aquí no hay nada</h1>
+    <p style="margin: 0.6rem auto 1.6rem; max-width: 40ch">
+      La página que buscas no existe (gracias por nada). Vuelve al inicio y
+      sigue por ahí.
+    </p>
+    <p style="display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap">
+      <a class="sticker" href={href('/')}>Ir al inicio →</a>
+      <a class="sticker sticker--green" href={href('musica/')}>Música</a>
+    </p>
+  </section>
+</Base>

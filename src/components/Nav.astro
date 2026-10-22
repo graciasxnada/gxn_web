@@ -1,0 +1,35 @@
+---
+import Starburst from './Starburst.astro';
+import { LINKS, NAV } from '../config.js';
+import { href, isActive, baseDir } from '../lib.js';
+
+const rel = Astro.url.pathname.replace(baseDir(), '/');
+---
+
+<header class="topbar">
+  <nav class="nav" aria-label="Navegación principal">
+    <a class="nav__brand" href={href('/')}>
+      <Starburst class="star" /> gracias×nada<sup>®</sup>
+    </a>
+
+    <button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-menu">
+      <span class="sr-only">Menú</span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <ul class="nav__links" id="nav-menu" data-open="false">
+      {NAV.map((item) => (
+        <li>
+          <a class="nav__link" href={href(item.href)} aria-current={isActive(rel, item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a class="sticker" href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Escuchar ↗</a>
+      </li>
+    </ul>
+  </nav>
+</header>

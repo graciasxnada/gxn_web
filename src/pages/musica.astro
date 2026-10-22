@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import ReleaseCard from '../components/ReleaseCard.astro';
+import { releases } from '../data/releases.js';
+import { href } from '../lib.js';
+---
+
+<Base
+  title="Música"
+  description="Toda la discografía de gracias x nada: el EP GxN (2025) y los singles Incomprendidos, Canción de amor adolescente y Entiéndeme, con fecha, temas y enlaces para escuchar."
+>
+  <section class="page-head wrap">
+    <p class="kicker">Catálogo GXN</p>
+    <h1>Discografía</h1>
+    <p class="lede" style="max-width: 52ch; margin-top: 1rem">
+      Todo lo publicado por gracias x nada, en orden inverso al calendario.
+      Cada ficha incluye lo que sabemos de cada lanzamiento: fecha, temas
+      y dónde escucharlo. Cuando la banda publicó algo nuevo, suma una línea aquí.
+    </p>
+  </section>
+
+  <hr class="rule rule--thick" />
+
+  <section class="wrap" style="padding-block: clamp(1.6rem, 4vw, 3rem)">
+    <p class="codes mono" aria-label="Números de catálogo" style="margin-bottom: 2rem">
+      {releases.map(r => r.code).join(' · ')}
+    </p>
+    <div>
+      {releases.map((r) => <ReleaseCard release={r} />)}
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="wrap" style="padding-block: clamp(2rem, 5vw, 3.5rem)">
+    <p class="mono">
+      Los enlaces llevan a Spotify, el único servicio publicado por la banda.
+      Cuando haya Apple Music, YouTube o Bandcamp, se añadirán en cada ficha.
+    </p>
+  </section>
+</Base>

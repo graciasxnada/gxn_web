@@ -1,0 +1,14 @@
+---
+import { formatDate } from '../data/shows.js';
+
+const { show, tag = 'Pasado' } = Astro.props;
+---
+
+<li class="show">
+  <span class="show__date">{formatDate(show.date, show.datePrecision)}</span>
+  <span class="show__venue">
+    {show.venue} · {show.city}
+    {show.notes && <span class="show__notes">{show.notes}</span>}
+  </span>
+  <span class="show__tag">{tag}</span>
+</li>

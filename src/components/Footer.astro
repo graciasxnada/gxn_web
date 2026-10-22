@@ -1,0 +1,47 @@
+---
+import Starburst from './Starburst.astro';
+import { SITE, LINKS, CONTACT, NAV } from '../config.js';
+import { href } from '../lib.js';
+import Ticker from './Ticker.astro';
+
+const year = new Date().getFullYear();
+---
+
+<Ticker
+  dark
+  items={[...Array(6).fill('gracias × nada'), ...Array(6).fill('Vigo, Galicia'), ...Array(6).fill('pop punk · skate punk')]}
+/>
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <h2>
+        <span style="color: var(--yellow)">gracias</span> × nada
+      </h2>
+      <p class="mono">
+        Trío de pop punk y skate punk desde Vigo, Galicia. Formada en 2022.
+      </p>
+      <a class="sticker sticker--dark" href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Escuchar en Spotify ↗</a>
+    </div>
+    <nav aria-label="Páginas">
+      <h3 class="kicker" style="color: var(--yellow)">Páginas</h3>
+      <ul>
+        {NAV.map((item) => <li><a href={href(item.href)}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <div>
+      <h3 class="kicker" style="color: var(--yellow)">Redes y contacto</h3>
+      <ul>
+        <li><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a></li>
+        <li><a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
+        <li><a href={href('/contacto/')}>Contacto y prensa</a></li>
+      </ul>
+      <p class="mono" style="margin-top: 0.8rem">
+        {CONTACT.email ? `Booking · ${CONTACT.email}` : CONTACT.note}
+      </p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span class="mono">© {year} gracias x nada</span>
+    <span class="mono">Hecho en Galicia · GxN</span>
+  </div>
+</footer>

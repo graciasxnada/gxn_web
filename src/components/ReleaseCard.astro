@@ -1,0 +1,22 @@
+---
+import { releaseTypeLabel, formatDate } from '../data/releases.js';
+import { href } from '../lib.js';
+
+const { release } = Astro.props;
+const label = releaseTypeLabel[release.type];
+const cover = release.cover?.file ?? release.cover;
+const coverAlt = release.cover?.alt || `Portada de ${release.title}`;
+---
+
+<a class="release-low" href={href(`musica/${release.slug}/`)}>
+  <div class="release-low__cover" data-code={release.code}>
+    <img src={cover?.src ?? cover} alt={coverAlt} width="640" height="640" loading="lazy" decoding="async" />
+  </div>
+  <div>
+    <p class="kicker">{label} · {formatDate(release.date)}</p>
+    <h3 class="release-low__title display">{release.title}</h3>
+    <p class="mono" style="margin-top: 0.8rem">
+      {release.tracks.length === 1 ? '1 canción' : `${release.tracks.length} canciones`} · ver ficha →
+    </p>
+  </div>
+</a>

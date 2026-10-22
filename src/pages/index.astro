@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import Starburst from '../components/Starburst.astro';
+import Ticker from '../components/Ticker.astro';
+import ReleaseCard from '../components/ReleaseCard.astro';
+import { LINKS } from '../config.js';
+import { featuredRelease, releases, releaseTypeLabel, formatDate } from '../data/releases.js';
+import { upcoming, past } from '../data/shows.js';
+import { href } from '../lib.js';
+import bandFoto from '../assets/img/band-foto.webp';
+
+const next = upcoming[0];
+const nextShow = next ?? null;
+---
+
+<Base isHome>
+  <section class="hero">
+    <div class="hero__bg">
+      <img
+        src={bandFoto.src}
+        alt="Los tres integrantes de gracias x nada posando con una patineta bajo una rampa de skate"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+    <Starburst class="hero__badge" />
+    <div class="hero__inner">
+      <h1 class="hero__title display">
+        gracias<br /><span class="x">×</span> nada
+      </h1>
+      <p class="hero__tagline lede">
+        Pop punk y skate punk desde Vigo, Galicia. Guitarras rápidas, estribillos directos y canciones para cantar mal con el corazón bien.
+      </p>
+      <div class="hero__cta">
+        <a class="sticker" href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Escuchar en Spotify ↗</a>
+        <a class="sticker sticker--red" href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+        <a class="sticker sticker--dark" href={href('musica/')}>Ver la música</a>
+      </div>
+      <p class="hero__meta mono">Vigo, Galicia · desde 2022 · tres sobre el escenario</p>
+    </div>
+  </section>
+
+  <Ticker
+    items={[...Array(4).fill('EP «GXN» fuera ya'), ...Array(4).fill('gracias x nada'), ...Array(4).fill('Vigo · Galicia'), ...Array(4).fill('pop punk rápido')]}
+  />
+
+  <section class="section feature" aria-labelledby="featured-title">
+    <div class="wrap feature__grid">
+      <div class="feature__cover">
+        <img
+          src={featuredRelease.cover.file.src}
+          alt={featuredRelease.cover.alt}
+          width="640"
+          height="640"
+          loading="eager"
+          decoding="async"
+        />
+        <span class="sticker feature__sticker sticker--red">{releaseTypeLabel[featuredRelease.type]} · {formatDate(featuredRelease.date)}</span>
+      </div>
+      <div>
+        <p class="kicker">Último lanzamiento</p>
+        <h2 id="featured-title" class="section-title">{featuredRelease.title}</h2>
+        <p class="lede" style="margin-top: 1rem">{featuredRelease.description}</p>
+        <ol class="tracklist">
+          {featuredRelease.tracks.map((t, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="dots">{t.title}</span>
+              <span class="dur">{t.duration}</span>
+            </li>
+          ))}
+        </ol>
+        <p style="margin-top: 1.6rem; display: flex; gap: 0.9rem; flex-wrap: wrap">
+          <a class="sticker" href={featuredRelease.links.spotify} target="_blank" rel="noopener noreferrer">Escuchar el EP ↗</a>
+          <a class="sticker sticker--dark" href={href(`musica/${featuredRelease.slug}/`)}>Ficha completa del EP</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="discos-title">
+    <div class="wrap">
+      <div class="page-head" style="padding: 0">
+        <p class="kicker">Catálogo GXN</p>
+        <h2 id="discos-title" class="section-title">Discos</h2>
+      </div>
+      <div>
+        {releases.map((r) => <ReleaseCard release={r} />)}
+      </div>
+      <p style="margin-top: 1.4rem">
+        <a class="sticker sticker--green" href={href('musica/')}>Toda la música →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sobre-title" style="background: var(--ink); color: var(--paper)">
+    <div class="wrap split" style="align-items: center">
+      <div>
+        <p class="kicker" style="color: var(--yellow)">La banda</p>
+        <h2 id="sobre-title" class="section-title" style="color: var(--paper)">Tres, rápidos y con melodías</h2>
+        <p class="lede" style="margin-top: 1.2rem">
+          gracias x nada son un trío de Vigo que toca pop punk y skate punk
+          desde 2022. Se apoyan en el punk melódico de finales de los 90
+          y los 2000: dos voces que se reparten los versos, canciones cortas
+          y directas y letras que hablan de lo que pasa entre la rampa y la
+          última canción de la noche.
+        </p>
+        <p style="margin-top: 1.6rem">
+          <a class="sticker" href={href('sobre/')}>Más sobre la banda →</a>
+        </p>
+      </div>
+      <figure style="margin: 0">
+        <img src={bandFoto.src} alt="gracias x nada, retrato en fisheye junto a una rampa de skate" loading="lazy" decoding="async" width="640" height="640" />
+        <figcaption class="mono" style="margin-top: 0.6rem; opacity: 0.8">Vigo · GxN</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="directo-title">
+    <div class="wrap">
+      <p class="kicker">En directo</p>
+      <h2 id="directo-title" class="section-title">Próximos conciertos</h2>
+      <div style="margin-top: 1.6rem">
+        {nextShow ? (
+          <ul class="shows">
+            <li class="show">
+              <span class="show__date">{formatDate(nextShow.date, nextShow.datePrecision)}</span>
+              <span class="show__venue">{nextShow.venue} · {nextShow.city}{nextShow.notes && <span class="show__notes">{nextShow.notes}</span>}</span>
+              <span class="show__tag">Próximo</span>
+            </li>
+          </ul>
+        ) : (
+          <div class="empty">
+            <Starburst class="empty__star" />
+            <p class="lede" style="margin: 0 0 0.6rem">
+              No hay fechas anunciadas... todavía.
+            </p>
+            <p class="mono">Sala, promotor o festival: para traer GxN a tu escenario, escríbenos.</p>
+            <p style="margin-top: 1rem; display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap">
+              <a class="sticker" href={href('contacto/')}>Contacto →</a>
+              <a class="sticker sticker--green" href={href('directo/')}>Ver lo pasado</a>
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>

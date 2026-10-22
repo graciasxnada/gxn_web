@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import Starburst from '../components/Starburst.astro';
+import ShowItem from '../components/ShowItem.astro';
+import { upcoming, past } from '../data/shows.js';
+import { href } from '../lib.js';
+import { LINKS } from '../config.js';
+
+const hrefInstagram = LINKS.instagram;
+---
+
+<Base
+  title="Directo"
+  description="Conciertos de gracias x nada: próximas fechas y conciertos pasados en salas como SalaSon, Sala Moon, El Contrabajo o Sala Mardi Gras."
+>
+  <section class="page-head wrap">
+    <p class="kicker">Directo</p>
+    <h1>Conciertos</h1>
+    <p class="lede" style="max-width: 48ch; margin-top: 1rem">
+      Las fechas confirmadas, arriba; los conciertos pasados, debajo.
+      Cuando haya nueva fecha, se cuelga aquí y en Instagram.
+    </p>
+  </section>
+
+  <section class="wrap" style="padding-bottom: clamp(2rem, 5vw, 3rem)">
+    <h2 class="kicker" style="color: var(--red)">Próximas fechas</h2>
+    {upcoming.length > 0 ? (
+      <ul class="shows">
+        {upcoming.map((show) => (
+          <ShowItem
+            show={show}
+            tag={show.ticketUrl ? 'Entradas' : 'Próximo'}
+          />
+        ))}
+      </ul>
+    ) : (
+      <div class="empty">
+        <Starburst class="empty__star" />
+        <p class="lede" style="margin: 0 0 0.5rem">Aún no hay fechas anunciadas.</p>
+        <p class="mono">
+          Sala, promotor, festival o feria: síguenos para la próxima cita
+          o escríbenos para traer GxN a tu escenario.
+        </p>
+        <p style="margin-top: 1.2rem; display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap">
+          <a class="sticker" href={href('contacto/')}>Escríbenos →</a>
+          <a class="sticker sticker--green" href={hrefInstagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+        </p>
+      </div>
+    )}
+  </section>
+
+  <section class="wrap" style="padding-bottom: var(--section-gap)">
+    <h2 class="kicker">Conciertos pasados</h2>
+    <ul class="shows">
+      {past.map((show) => <ShowItem show={show} tag="Pasado" />)}
+    </ul>
+    <p class="mono" style="margin-top: 1rem; opacity: 0.75">
+      Fechas recogidas de carteleras y prensa local (Rouco Son, Mardi Gras).
+      Si falta alguno, no fue olvidado a propósito: escríbenos y lo añadimos.
+    </p>
+  </section>
+</Base>

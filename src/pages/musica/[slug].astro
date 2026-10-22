@@ -1,0 +1,133 @@
+---
+import Base from '../../layouts/Base.astro';
+import Starburst from '../../components/Starburst.astro';
+import { releases, releaseTypeLabel, formatDate } from '../../data/releases.js';
+import { href, baseDir } from '../../lib.js';
+import { BAND, LINKS, SITE } from '../../config.js';
+
+export function getStaticPaths() {
+  return releases.map((release) => ({ params: { slug: release.slug }, props: { release } }));
+}
+
+const { release } = Astro.props;
+const baseRoot = new URL(baseDir(), Astro.site?.href ?? SITE.url + '/');
+
+// JSON-LD MusicRelease — solo datos del catálogo publicado
+const cover = release.cover.file;
+const relJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicRelease',
+  name: release.title,
+  byArtist: { '@type': 'MusicGroup', name: BAND.name },
+  datePublished: release.date,
+  musicReleaseType: release.type === 'ep' ? 'EP' : 'Single',
+  numTracks: release.tracks.length,
+  track: release.tracks.map((t) => ({
+    '@type': 'MusicRecording',
+    name: t.title,
+    duration: 'PT' + (t.duration.split(':')[0] | 0) + 'M' + t.duration.split(':')[1] + 'S',
+  })),
+  url: new URL(`musica/${release.slug}/`, baseRoot).href,
+  sameAs: [release.links?.spotify].filter(Boolean),
+  image: new URL(cover.src, baseRoot).href,
+};
+---
+
+<Base
+  title={`${release.title} (${releaseTypeLabel[release.type]}, ${release.date.slice(0, 4)}) · Música`}
+  description={release.description}
+>
+  <div class="page-head wrap">
+    <p class="byline-mark">
+      <Starburst class="star" />
+      <a href={href('musica/')}>Música</a>
+      &gt; {release.code}
+    </p>
+    <h1>{release.title}</h1>
+    <p class="kicker" style="margin-top: 0.9rem">
+      {releaseTypeLabel[release.type]} · {formatDate(release.date)} · {release.code}
+    </p>
+  </div>
+
+  <section class="wrap" style="padding-bottom: clamp(2rem, 5vw, 3.5rem)">
+    <div class="detail">
+      <div class="detail__cover">
+        <img src={cover.src} alt={release.cover.alt} width="640" height="640" decoding="async" />
+      </div>
+      <div>
+        <p class="mono">{release.code}</p>
+        <p class="lede" style="margin-top: 0.6rem">{release.description}</p>
+
+        <h2 class="kicker" style="margin-top: 2rem">Temas</h2>
+        <ol class="tracklist">
+          {release.tracks.map((t, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="dots">{t.title}</span>
+              <span class="dur">{t.duration}</span>
+            </li>
+          ))}
+        </ol>
+
+        {release.credits?.length > 0 && (
+          <div style="margin-top: 1.8rem">
+            <h2 class="kicker">Créditos</h2>
+            <ul class="mono" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.3rem">
+              {release.credits.map((c) => <li>· {c}</li>)}
+            </ul>
+          </div>
+        )}
+
+        <div style="margin-top: 2rem; display: flex; gap: 0.9rem; flex-wrap: wrap">
+          {Object.entries(release.links ?? {}).map(([platform, url]) => (
+            <a class="sticker" href={url} target="_blank" rel="noopener noreferrer">
+              Escuchar en {platform.charAt(0).toUpperCase() + platform.slice(1)} ↗
+            </a>
+          ))}
+          <a class="sticker sticker--green" href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Novedades en Instagram ↗</a>
+        </div>
+
+        {release.links?.spotify && (
+          <div class="embed">
+            <p class="mono duration-note">
+              Reproductor de Spotify. Si no carga, usa el botón «Escuchar en Spotify».
+            </p>
+            <iframe
+              src={release.links.spotify.replace('https://open.spotify.com/', 'https://open.spotify.com/embed/')}
+              width="100%"
+              height="232"
+              frameborder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              title="Reproductor de Spotify"></iframe>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="wrap" style="padding-block: clamp(1.8rem, 4vw, 3rem)">
+    <h2 class="section-title" style="font-size: clamp(1.8rem, 4.5vw, 2.8rem)">Otros lanzamientos</h2>
+    <div style="margin-top: 1rem">
+      {releases.filter((r) => r.slug !== release.slug).slice(0, 3).map((r) => {
+        const rc = r.cover.file;
+        return (
+          <a class="release-low" href={href(`musica/${r.slug}/`)}>
+            <div class="release-low__cover" data-code={r.code}>
+              <img src={rc.src} alt={r.cover.alt} width="640" height="640" loading="lazy" decoding="async" />
+            </div>
+            <div>
+              <p class="kicker">{releaseTypeLabel[r.type]} · {formatDate(r.date)}</p>
+              <h3 class="release-low__title display">{r.title}</h3>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(relJsonLd)} is:inline></script>
+</Base>
+

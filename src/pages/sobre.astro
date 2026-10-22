@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Ticker from '../components/Ticker.astro';
+import { BAND, LINKS } from '../config.js';
+import { href } from '../lib.js';
+import bandFoto from '../assets/img/band-foto.webp';
+---
+
+<Base
+  title="Sobre la banda"
+  description="gracias x nada (GxN) es un trío de pop punk y skate punk de Vigo, Galicia, formado en 2022. Aquí puedes leer su historia y lo que caracteriza su música."
+>
+  <section class="page-head wrap">
+    <p class="kicker">Sobre</p>
+    <h1>La banda</h1>
+  </section>
+
+  <section class="wrap" style="padding-bottom: clamp(2rem, 5vw, 3rem)">
+    <div class="split">
+      <div>
+        <p class="lede">
+          gracias x nada (o GxN) son un trío de <strong>Vigo, en Galicia</strong>,
+          que nace en 2022 como banda de <strong>pop punk y skate punk</strong>.
+          Escriben canciones que beben del punk melódico de finales de los 90 y
+          los 2000: guitarras rápidas, ritmos acelerados y melodías que
+          aguantan desde la primera escucha.
+        </p>
+        <p>
+          Sobre el escenario son tres: dos voces principales que se pasan los
+          versos y prestan armonía al otro. Los estribillos salen directos y
+          las letras hablan de lo personal — amistades largas, veranos cortos,
+          canciones de amor que no esperan nada. Cantan en castellano y en
+          gallego, y el directo no necesita parafernalia: canciones y gas.
+        </p>
+        <p>
+          Tras varios años tocando por salas y ciclos de Galicia, en 2025
+          publicaron su primer EP, <em>GxN</em>: cinco canciones que resumen su
+          manera de entender el género — cortas, a fondo y con una balada
+          crepuscular de casi ocho minutos para cerrar.
+        </p>
+        <p class="mono" style="margin-top: 1.2rem">
+          Han compartido escenario con bandas como Eskravos, Trikornio,
+          Filtro, Deaf Whale o Martes Mal, y medios locales como Rouco Son
+          han seguido su sendero desde los primeros conciertos.
+        </p>
+        <p style="margin-top: 1.4rem">
+          <a class="sticker" href={href('contacto/')}>Contacto y prensa →</a>
+        </p>
+      </div>
+      <figure style="margin: 0">
+        <img
+          src={bandFoto.src}
+          alt="Retrato de gracias x nada en fisheye junto a una rampa de skate en Vigo"
+          width="640"
+          height="640"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="mono" style="margin-top: 0.6rem">
+          gracias x nada · Vigo · retrato oficial
+        </figcaption>
+      </figure>
+    </div>
+
+    <dl class="facts">
+      <div><dt>Formación</dt><dd>2022</dd></div>
+      <div><dt>Origen</dt><dd>Vigo, Galicia (España)</dd></div>
+      <div><dt>Estilo</dt><dd>Pop punk · Skate punk</dd></div>
+      <div><dt>Integrantes</dt><dd>Trío</dd></div>
+      <div><dt>Idiomas de las canciones</dt><dd>Castellano · Gallego</dd></div>
+      <div><dt>Últimos pasos</dt><dd>EP «GxN» (2025)</dd></div>
+    </dl>
+  </section>
+
+  <Ticker
+    items={[...Array(5).fill('pop punk desde Vigo'), ...Array(5).fill('desde 2022'), ...Array(5).fill('guitarras rápidas')]}
+  />
+</Base>

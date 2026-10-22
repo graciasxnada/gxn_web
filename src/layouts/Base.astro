@@ -1,0 +1,103 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/archivo/wdth-italic.css';
+import '@fontsource/space-mono/latin-400.css';
+import '@fontsource/space-mono/latin-700.css';
+import '@fontsource/space-mono/latin-400-italic.css';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, BAND, LINKS } from '../config.js';
+
+const { title, description, isHome = false } = Astro.props;
+
+const siteUrl = Astro.site?.href ?? SITE.url + '/';
+const baseDir = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
+const baseUrl = new URL(baseDir, siteUrl);
+const currentPage = new URL(Astro.url.pathname, siteUrl).href;
+
+const pageTitle = isHome
+  ? `${SITE.title} — ${BAND.genre[0]} y ${BAND.genre[1]} desde Vigo`
+  : `${title} — ${SITE.title}`;
+const desc = description ?? SITE.description;
+const ogUrl = new URL(SITE.ogImage, baseUrl).href;
+
+// JSON-LD MusicGroup — solo hechos verificados
+const bandJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicGroup',
+  name: BAND.name,
+  description: SITE.description,
+  genre: ['Pop Punk', 'Skate Punk'],
+  foundingDate: BAND.formed,
+  foundingLocation: { '@type': 'Place', name: BAND.origin },
+  url: baseUrl.href,
+  image: new URL('band-foto.webp', baseUrl).href,
+  sameAs: [LINKS.spotify, LINKS.instagram],
+};
+
+const asset = (file) => new URL(file, baseUrl).href;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={currentPage} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="icon" type="image/svg+xml" href={asset('favicon.svg')} />
+    <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />
+    <link rel="manifest" href={asset('manifest.webmanifest')} />
+    <meta name="theme-color" content="#2fae4a" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={currentPage} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content={ogUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(bandJsonLd)} is:inline></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // Menú móvil accesible
+      const burger = document.querySelector('.nav__burger');
+      const panel = document.querySelector('.nav__links');
+      if (burger && panel) {
+        const setOpen = (open) => {
+          panel.dataset.open = String(open);
+          burger.setAttribute('aria-expanded', String(open));
+          document.body.classList.toggle('nav-locked', open);
+          if (open) panel.querySelector('a')?.focus();
+        };
+        burger.addEventListener('click', () => setOpen(panel.dataset.open !== 'true'));
+        panel.addEventListener('click', (e) => {
+          if (e.target.closest('a')) setOpen(false);
+        });
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && panel.dataset.open === 'true') {
+            burger.focus();
+            setOpen(false);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

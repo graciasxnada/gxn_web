@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import Ticker from '../components/Ticker.astro';
+import { CONTACT, PRESS, LINKS, BAND } from '../config.js';
+import { href } from '../lib.js';
+import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases.js';
+---
+
+<Base
+  title="Contacto y prensa"
+  description="Contacto de gracias x nada para booking, salas, promotores, prensa y colaboraciones. BIO corta y datos de la banda para medios."
+>
+  <section class="page-head wrap">
+    <p class="kicker">Contacto</p>
+    <h1>Habla con GxN</h1>
+    <p class="lede" style="max-width: 52ch; margin-top: 1rem">
+      booking, salas, promotores, radios, zines y quien tenga curiosidad de
+      cómo sonarían en tu festival: esta es la puerta.
+    </p>
+  </section>
+
+  <section class="wrap" style="padding-bottom: clamp(2rem, 5vw, 3rem)">
+    <div class="contact-blocks">
+      <div class="contact-card">
+        <h3>{CONTACT.booking}</h3>
+        {CONTACT.email ? (
+          <p class="mono"><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p>
+        ) : (
+          <p class="mono">
+            Ahora mismo el canal directo es Instagram:
+            <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">{LINKS.instagramHandle} ↗</a>
+            <br />(cuando exista e-mail de booking, se publicará aquí)
+          </p>
+        )}
+      </div>
+      <div class="contact-card">
+        <h3>{CONTACT.press}</h3>
+        <p class="mono">
+          Pide el press kit por Instagram:
+          <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">{LINKS.instagramHandle} ↗</a>
+        </p>
+        {PRESS.kitFile ? (
+          <p><a class="sticker sticker--red" href={PRESS.kitFile} download>Descargar press kit ↓</a></p>
+        ) : (
+          <p class="mono" style="color: rgba(20,20,15,.65)">Press kit: disponible bajo petición</p>
+        )}
+      </div>
+      <div class="contact-card">
+        <h3>Redes</h3>
+        <ul class="mono" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem">
+          <li><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a></li>
+          <li><a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule rule--thick" />
+
+  <section class="wrap" style="padding-block: clamp(2rem, 5vw, 3.5rem)">
+    <p class="kicker">Para medios — bio corta</p>
+    <p class="lede" style="max-width: 62ch">{PRESS.bioShort}</p>
+
+    <dl class="facts">
+      <div><dt>Banda</dt><dd>{BAND.name}</dd></div>
+      <div><dt>Origen</dt><dd>{BAND.origin}</dd></div>
+      <div><dt>Estilo</dt><dd>Pop punk · Skate punk</dd></div>
+      <div><dt>Formación</dt><dd>{BAND.formed}</dd></div>
+      <div><dt>Último lanzamiento</dt><dd>{featuredRelease.title} ({releaseTypeLabel[featuredRelease.type]}, {formatDate(featuredRelease.date)})</dd></div>
+      <div><dt>Spotify</dt><dd><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">perfil oficial ↗</a></dd></div>
+    </dl>
+    <p class="mono" style="margin-top: 1rem; opacity: 0.75">
+      ⚠️ Pendiente: ficha técnica (rider, formación sobre el escenario y
+      necesidad de material real de la banda para completar la página).
+    </p>
+  </section>
+
+  <Ticker items={[...Array(6).fill('booking abierto'), ...Array(6).fill('prensa bienvenida'), ...Array(6).fill('Vigo → cualquier sala')]} />
+</Base>
