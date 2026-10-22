@@ -633,6 +633,9 @@ h2 {
   .feature__grid {
     grid-template-columns: 1fr;
   }
+  .feature__cover {
+    margin-bottom: 0.8rem;
+  }
   .feature__sticker {
     bottom: -1.2rem;
     left: -0.6rem;

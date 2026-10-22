@@ -7,10 +7,7 @@ import Ticker from './Ticker.astro';
 const year = new Date().getFullYear();
 ---
 
-<Ticker
-  dark
-  items={[...Array(6).fill('gracias × nada'), ...Array(6).fill('Vigo, Galicia'), ...Array(6).fill('pop punk · skate punk')]}
-/>
+<Ticker dark items={Array(14).fill('gracias × nada')} />
 <footer class="footer">
   <div class="footer__inner">
     <div>

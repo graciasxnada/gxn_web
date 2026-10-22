@@ -13,6 +13,15 @@ import bandFoto from '../assets/img/band-foto.webp';
 
 const next = upcoming[0];
 const nextShow = next ?? null;
+
+// Cinta bajo el hero: el próximo concierto (o el nombre si no hay fechas).
+const cintaProximo = nextShow
+  ? [
+      `Próximo bolo · ${formatDate(nextShow.date, nextShow.datePrecision)}`,
+      `${nextShow.venue} · ${nextShow.city}`,
+      ...(nextShow.ticketNote ? [nextShow.ticketNote] : []),
+    ]
+  : ['gracias × nada'];
 ---
 
 <Base isHome>
@@ -42,9 +51,7 @@ const nextShow = next ?? null;
     </div>
   </section>
 
-  <Ticker
-    items={[...Array(4).fill('EP «GXN» fuera ya'), ...Array(4).fill('gracias x nada'), ...Array(4).fill('Vigo · Galicia'), ...Array(4).fill('pop punk rápido')]}
-  />
+  <Ticker items={cintaProximo} />
 
   <section class="section feature" aria-labelledby="featured-title">
     <div class="wrap feature__grid">

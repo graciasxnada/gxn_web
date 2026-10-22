@@ -78,7 +78,9 @@ si el día no es exacto).
   nav y estados vacíos. Tipografía: Archivo variable (display expandido)
   + Space Mono para rótulos de fanzine.
 - Ticker de cinta tipo fanpress, sombras duras (4px offset) en botones,
-  sombras de bloque en portadas.
+  sombras de bloque en portadas. La cinta bajo el hero cuenta el próximo
+  bolo (sale de `shows.js`; sin fechas, cae al nombre); la del footer
+  repite «gracias × nada».
 
 ## Verificado vs. pendiente
 
