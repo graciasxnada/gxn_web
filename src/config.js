@@ -34,6 +34,7 @@ export const LINKS = {
   instagram: 'https://www.instagram.com/graciasxnada_/',
   appleMusic: 'https://music.apple.com/us/artist/gracias-x-nada/6778918504',
   youtube: 'https://www.youtube.com/@graciasxnadagxn',
+  tiktok: 'https://www.tiktok.com/@graciasxnada_',
   spotifyHandle: 'gracias x nada',
   instagramHandle: '@graciasxnada_',
 };
