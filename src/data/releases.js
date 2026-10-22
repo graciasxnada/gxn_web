@@ -43,11 +43,10 @@ export const releases = [
     links: {
       spotify: 'https://open.spotify.com/album/7laXnCkDjHBuUPjJnX9U16',
     },
-    code: 'GXN 004',
-    // Singles de adelanto publicados antes del EP (GXN 001–003).
+    code: 'GXN 001',
+    // Singles de adelanto publicados antes del EP (sin código de catálogo).
     adelantos: [
       {
-        code: 'GXN 001',
         title: 'Incomprendidos',
         date: '2024-11-07',
         note: 'primer single publicado por la banda y tema con el que suelen abrir los directos',
@@ -55,14 +54,12 @@ export const releases = [
         links: { spotify: 'https://open.spotify.com/album/4I0z6glzhAmJSif8xOwVBu' },
       },
       {
-        code: 'GXN 002',
         title: 'Canción de amor adolescente',
         date: '2024-12-20',
         cover: { file: coverCancionAmor, alt: 'Portada del single Canción de amor adolescente de gracias x nada' },
         links: { spotify: 'https://open.spotify.com/album/5RFQdGdxFns3B9msOfaYIX' },
       },
       {
-        code: 'GXN 003',
         title: 'Entiéndeme',
         date: '2025-01-04',
         note: 'con kinss y deica (créditos de Spotify)',

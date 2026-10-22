@@ -51,7 +51,8 @@ Source: GitHub Actions**; cada push a `main` construye y publica.
 1. Copiar portada (webp recomendado, máx. 640 px) a `src/assets/img/`.
 2. Importarla en `src/data/releases.js` y añadir el bloque con:
    `slug`, `title`, `type` (`single`|`ep`|`album`), `date`, `cover`,
-   `description`, `tracks`, `links.spotify`, `code` (GXN 005…).
+   `description`, `tracks`, `links.spotify` y `code` opcional (el EP
+   lleva `GXN 001`; el siguiente lanzamiento principal sería `GXN 002`).
 3. `npm run build`. La ficha `/musica/<slug>/` se genera sola (con
    JSON-LD `MusicRelease`, reproductor de Spotify y "otros lanzamientos").
 

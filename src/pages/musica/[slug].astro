@@ -105,7 +105,7 @@ const relJsonLd = {
                       href={a.links.spotify}
                       target="_blank"
                       rel="noopener noreferrer"
-                    >{a.code} — escuchar en Spotify ↗</a>
+                    >{a.code ? a.code + ' — ' : ''}escuchar en Spotify ↗</a>
                   </div>
                 </div>
               ))}
