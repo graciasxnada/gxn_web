@@ -6,6 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "qa": "node scripts/qa.mjs",
+    "check": "npm run build && npm run qa",
     "astro": "astro"
   },
   "keywords": [],

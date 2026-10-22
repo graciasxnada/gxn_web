@@ -11,7 +11,13 @@ npm install     # dependencias
 npm run dev     # servidor de desarrollo en http://localhost:4321/gxn_web/
 npm run build   # build estático a ./dist
 npm run preview # sirve ./dist para revisarlo
+npm run check   # build + QA automática (recomendado antes de commitear)
 ```
+
+`npm run check` (o `npm run qa` sobre un dist ya construido) valida en segundos:
+enlaces internos sin destino, `alt` en imágenes, `title`/description/canonical/
+viewport/lang, JSON-LD válido y `sameAs` con todas las redes de `config.js`,
+mailto de contacto, robots.txt y sitemap. Si algo falla, sale con código 1.
 
 ## Estructura
 
