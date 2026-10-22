@@ -5,6 +5,9 @@
  * Para añadir un lanzamiento: copia un bloque, cambia slug/título/fecha/portada
  * y los enlaces. El resto de la web se genera solo.
  *
+ * Los singles de adelanto no van como lanzamientos aparte: se listan en
+ * `adelantos` del lanzamiento al que precedieron (la ficha del EP los recoge).
+ *
  * types: 'single' | 'ep' | 'album'
  * durations: segundos.
  * credits: solo hechos verificados (Spotify: artistas; prensa: producción).
@@ -41,53 +44,32 @@ export const releases = [
       spotify: 'https://open.spotify.com/album/7laXnCkDjHBuUPjJnX9U16',
     },
     code: 'GXN 004',
-  },
-  {
-    slug: 'entiendeme',
-    title: 'Entiéndeme',
-    type: 'single',
-    date: '2025-01-04',
-    cover: { file: coverEntiendeme, alt: 'Portada del single Entiéndeme: silueta de un perro dentro de una explosión cómic amarilla sobre papel verde con huellas' },
-    description:
-      'Single colaboración con kinss y deica, y último adelanto del EP GxN.',
-    tracks: [{ title: 'Entiéndeme', duration: '2:16' }],
-    credits: [
-      'Con kinss y deica (créditos de Spotify).',
-      'Grabado por deica.',
+    // Singles de adelanto publicados antes del EP (GXN 001–003).
+    adelantos: [
+      {
+        code: 'GXN 001',
+        title: 'Incomprendidos',
+        date: '2024-11-07',
+        note: 'primer single publicado por la banda y tema con el que suelen abrir los directos',
+        cover: { file: coverIncomprendidos, alt: 'Portada del single Incomprendidos de gracias x nada' },
+        links: { spotify: 'https://open.spotify.com/album/4I0z6glzhAmJSif8xOwVBu' },
+      },
+      {
+        code: 'GXN 002',
+        title: 'Canción de amor adolescente',
+        date: '2024-12-20',
+        cover: { file: coverCancionAmor, alt: 'Portada del single Canción de amor adolescente de gracias x nada' },
+        links: { spotify: 'https://open.spotify.com/album/5RFQdGdxFns3B9msOfaYIX' },
+      },
+      {
+        code: 'GXN 003',
+        title: 'Entiéndeme',
+        date: '2025-01-04',
+        note: 'con kinss y deica (créditos de Spotify)',
+        cover: { file: coverEntiendeme, alt: 'Portada del single Entiéndeme: silueta de un perro dentro de una explosión cómic amarilla sobre papel verde con huellas' },
+        links: { spotify: 'https://open.spotify.com/album/6RItaNJN4852THxFD22XQN' },
+      },
     ],
-    links: {
-      spotify: 'https://open.spotify.com/album/6RItaNJN4852THxFD22XQN',
-    },
-    code: 'GXN 003',
-  },
-  {
-    slug: 'cancion-de-amor-adolescente',
-    title: 'Canción de amor adolescente',
-    type: 'single',
-    date: '2024-12-20',
-    cover: { file: coverCancionAmor, alt: 'Portada del single Canción de amor adolescente de gracias x nada' },
-    description: 'Segundo adelanto del EP GxN.',
-    tracks: [{ title: 'Canción de amor adolescente', duration: '2:06' }],
-    credits: ['Grabado por deica.'],
-    links: {
-      spotify: 'https://open.spotify.com/album/5RFQdGdxFns3B9msOfaYIX',
-    },
-    code: 'GXN 002',
-  },
-  {
-    slug: 'incomprendidos',
-    title: 'Incomprendidos',
-    type: 'single',
-    date: '2024-11-07',
-    cover: { file: coverIncomprendidos, alt: 'Portada del single Incomprendidos de gracias x nada' },
-    description:
-      'Primer single publicado por la banda y tema con el que suelen abrir los directos.',
-    tracks: [{ title: 'Incomprendidos', duration: '3:36' }],
-    credits: ['Grabado por deica.'],
-    links: {
-      spotify: 'https://open.spotify.com/album/4I0z6glzhAmJSif8xOwVBu',
-    },
-    code: 'GXN 001',
   },
 ];
 

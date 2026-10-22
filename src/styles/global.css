@@ -756,6 +756,75 @@ a.show__tag--link:hover {
   text-align: center;
 }
 
+/* --------------------------------------------------------------------------
+   Adelantos de un lanzamiento (singles previos)
+   -------------------------------------------------------------------------- */
+
+.prerelease {
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 1.2rem);
+}
+
+.prerelease__item {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  column-gap: 1rem;
+  align-items: start;
+  text-decoration: none;
+  color: inherit;
+}
+
+.prerelease__item img {
+  width: 74px;
+  height: 74px;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--yellow);
+}
+
+.prerelease__item:nth-child(2n) img {
+  box-shadow: 4px 4px 0 var(--green);
+}
+
+.prerelease__body {
+  display: grid;
+  justify-items: start;
+  gap: 0.1rem;
+}
+
+.prerelease__date {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+.prerelease__title {
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  font-weight: 850;
+  font-stretch: 110%;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.prerelease__note {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.prerelease__code {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 2px solid var(--ink);
+  background: var(--yellow);
+  padding: 0.2rem 0.5rem;
+  margin-top: 0.25rem;
+  text-decoration: none;
+}
+
+.prerelease__item:hover .prerelease__code {
+  background: var(--red);
+  color: var(--paper);
+}
+
 .empty__star {
   display: inline-block;
   width: 64px;

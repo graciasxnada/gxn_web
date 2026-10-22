@@ -55,6 +55,11 @@ Source: GitHub Actions**; cada push a `main` construye y publica.
 3. `npm run build`. La ficha `/musica/<slug>/` se genera sola (con
    JSON-LD `MusicRelease`, reproductor de Spotify y "otros lanzamientos").
 
+Los singles de adelanto de un disco mayor **no van como lanzamientos
+aparte**: se añaden al objeto del disco en la propiedad `adelantos`
+(`code`, `title`, `date`, `note`, `cover`, `links.spotify`) y la ficha
+del disco los lista con su portada y enlace.
+
 ### Una fecha de concierto
 
 Añadir objeto a `upcoming` o `past` en `src/data/shows.js`

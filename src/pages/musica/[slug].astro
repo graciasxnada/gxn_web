@@ -11,6 +11,7 @@ export function getStaticPaths() {
 
 const { release } = Astro.props;
 const baseRoot = new URL(baseDir(), Astro.site?.href ?? SITE.url + '/');
+const isSoloRelease = releases.filter((r) => r.slug !== release.slug).length === 0;
 
 // JSON-LD MusicRelease — solo datos del catálogo publicado
 const cover = release.cover.file;
@@ -78,6 +79,40 @@ const relJsonLd = {
           </div>
         )}
 
+        {release.adelantos?.length > 0 && (
+          <div style="margin-top: 2rem">
+            <h2 class="kicker">Adelantos del {releaseTypeLabel[release.type].toLowerCase()}</h2>
+            <p class="mono" style="margin: 0.4rem 0 0.8rem; opacity: 0.8">
+              Publicados antes de la salida del disco, como aperitivo.
+            </p>
+            <div class="prerelease">
+              {release.adelantos.map((a) => (
+                <div class="prerelease__item">
+                  <img
+                    src={a.cover.file.src}
+                    alt={a.cover.alt}
+                    width="640"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="prerelease__body">
+                    <span class="mono prerelease__date">· {formatDate(a.date)}</span>
+                    <span class="prerelease__title display">{a.title}</span>
+                    {a.note && <span class="mono prerelease__note">{a.note}</span>}
+                    <a
+                      class="mono prerelease__code"
+                      href={a.links.spotify}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >{a.code} — escuchar en Spotify ↗</a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div style="margin-top: 2rem; display: flex; gap: 0.9rem; flex-wrap: wrap">
           {Object.entries(release.links ?? {}).map(([platform, url]) => (
             <a class="sticker" href={url} target="_blank" rel="noopener noreferrer">
@@ -106,27 +141,31 @@ const relJsonLd = {
     </div>
   </section>
 
-  <hr class="rule" />
+  {!isSoloRelease && (
+    <>
+      <hr class="rule" />
 
-  <section class="wrap" style="padding-block: clamp(1.8rem, 4vw, 3rem)">
-    <h2 class="section-title" style="font-size: clamp(1.8rem, 4.5vw, 2.8rem)">Otros lanzamientos</h2>
-    <div style="margin-top: 1rem">
-      {releases.filter((r) => r.slug !== release.slug).slice(0, 3).map((r) => {
-        const rc = r.cover.file;
-        return (
-          <a class="release-low" href={href(`musica/${r.slug}/`)}>
-            <div class="release-low__cover" data-code={r.code}>
-              <img src={rc.src} alt={r.cover.alt} width="640" height="640" loading="lazy" decoding="async" />
-            </div>
-            <div>
-              <p class="kicker">{releaseTypeLabel[r.type]} · {formatDate(r.date)}</p>
-              <h3 class="release-low__title display">{r.title}</h3>
-            </div>
-          </a>
-        );
-      })}
-    </div>
-  </section>
+      <section class="wrap" style="padding-block: clamp(1.8rem, 4vw, 3rem)">
+        <h2 class="section-title" style="font-size: clamp(1.8rem, 4.5vw, 2.8rem)">Otros lanzamientos</h2>
+        <div style="margin-top: 1rem">
+          {releases.filter((r) => r.slug !== release.slug).slice(0, 3).map((r) => {
+            const rc = r.cover.file;
+            return (
+              <a class="release-low" href={href(`musica/${r.slug}/`)}>
+                <div class="release-low__cover" data-code={r.code}>
+                  <img src={rc.src} alt={r.cover.alt} width="640" height="640" loading="lazy" decoding="async" />
+                </div>
+                <div>
+                  <p class="kicker">{releaseTypeLabel[r.type]} · {formatDate(r.date)}</p>
+                  <h3 class="release-low__title display">{r.title}</h3>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    </>
+  )}
 
   <script type="application/ld+json" set:html={JSON.stringify(relJsonLd)} is:inline></script>
 </Base>
