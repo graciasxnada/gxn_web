@@ -513,11 +513,11 @@ h2 {
 
 @media (max-width: 640px) {
   .hero__badge {
-    top: auto;
-    bottom: 42%;
-    right: auto;
-    left: 4vw;
-    width: 84px;
+    top: 0.6rem;
+    bottom: auto;
+    right: 2vw;
+    left: auto;
+    width: 72px;
   }
 }
 
