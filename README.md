@@ -84,6 +84,8 @@ pasados, Twitter/Instagram/Spotify oficiales.
 - [x] E-mail de booking/prensa: `graciasxnadagrupo@gmail.com` (config en `CONTACT.email`)
 - [x] Foto de banda real (banner de Spotify → hero; fisheye → sobre) y portadas reales
 - [x] Apple Music y YouTube (enlaces de artista) — añadir enlaces por lanzamiento si existen
+- [x] Fotos de directo (Mardi Gras 22.07.2026 y Ocean Rock Bar 14.08.2026, en `src/assets/img/directo/`)
+- [x] Sala Moon 13.11.2026: entradas solo en puerta (`ticketNote` + `infoUrl` al post de anuncio)
 
 **Pendiente de aportar por la banda** (marcado con ⚠️ en el código):
 
@@ -91,4 +93,7 @@ pasados, Twitter/Instagram/Spotify oficiales.
 - [ ] Press kit PDF (`PRESS.kitFile`).
 - [ ] Enlaces de Apple Music/YouTube por lanzamiento concreto.
 - [ ] Ficha técnica de directo (rider, formación) para prensa.
-- [ ] Más fotos y entradas de venta (`ticketUrl`) por concierto.
+
+Las fotos de directo se gestionan soltas: webp con prefijo `orb-` (Ocean Rock
+Bar) o `mdg-` (Mardi Gras) en `src/assets/img/directo/`; la página de Directo
+las recoge automáticamente con `import.meta.glob`.

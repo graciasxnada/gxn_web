@@ -6,7 +6,9 @@
  *   date: '2026-07-22' — { date, venue, city, notes }
  *   Si la fecha no es exacta, usa datePrecision: 'month' con fecha representativa
  *   (el día no se mostrará).
- * ticketUrl: null mientras no exista enlace real de venta.
+ * ticketUrl: enlace de venta online. Si solo hay entradas en puerta,
+ * deja ticketUrl: null, usa ticketNote y apunta infoUrl al post de
+ * anuncio (Instagram, cartel, etc.).
  */
 
 export const upcoming = [
@@ -16,7 +18,9 @@ export const upcoming = [
     venue: 'Sala Moon',
     city: 'Santiago de Compostela',
     notes: 'con Martes Mal y Fuego Lolita',
-    ticketUrl: null, // ⚠️ añadido cuando exista venta
+    ticketUrl: null, // sin venta online: solo entradas en puerta
+    ticketNote: 'Entradas solo en puerta',
+    infoUrl: 'https://www.instagram.com/p/Degk1pFCm42/', // post de anuncio
   },
 ];
 

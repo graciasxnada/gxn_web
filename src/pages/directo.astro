@@ -7,6 +7,27 @@ import { href } from '../lib.js';
 import { LINKS } from '../config.js';
 
 const hrefInstagram = LINKS.instagram;
+
+// Imágenes de directo — suelta webp en src/assets/img/directo/ y aparecen aquí.
+const fotos = import.meta.glob('../assets/img/directo/*.webp', { eager: true, import: 'default' });
+const pick = (prefix) =>
+  Object.keys(fotos)
+    .filter((k) => k.includes('/' + prefix + '-'))
+    .sort()
+    .map((k) => fotos[k]);
+
+const gruposFotos = [
+  {
+    titulo: 'Ocean Rock Bar · Vigo · agosto 2026',
+    alt: 'gracias x nada en directo en el Ocean Rock Bar de Vigo, agosto de 2026',
+    fotos: pick('orb'),
+  },
+  {
+    titulo: 'Sala Mardi Gras · A Coruña · 22.07.2026',
+    alt: 'gracias x nada en directo en la Sala Mardi Gras de A Coruña, 22 de julio de 2026',
+    fotos: pick('mdg'),
+  },
+];
 ---
 
 <Base
@@ -55,8 +76,29 @@ const hrefInstagram = LINKS.instagram;
       {past.map((show) => <ShowItem show={show} tag="Pasado" />)}
     </ul>
     <p class="mono" style="margin-top: 1rem; opacity: 0.75">
-      Fechas recogidas de carteleras y prensa local (Rouco Son, Mardi Gras).
+      Fechas recogidas de carteleras, prensa local y la propia banda.
       Si falta alguno, no fue olvidado a propósito: escríbenos y lo añadimos.
     </p>
+  </section>
+
+  <section class="section" aria-labelledby="fotos-title" style="padding-top: 0">
+    <div class="wrap">
+      <h2 id="fotos-title" class="section-title">Fotos de directo</h2>
+      {gruposFotos.map((grupo) => (
+        <div style="margin-top: 1.4rem">
+          <h3 class="kicker">{grupo.titulo}</h3>
+          <div class="fotos">
+            {grupo.fotos.map((foto) => (
+              <img
+                src={foto.src}
+                alt={grupo.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   </section>
 </Base>

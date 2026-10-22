@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Starburst from '../components/Starburst.astro';
 import Ticker from '../components/Ticker.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
+import ShowItem from '../components/ShowItem.astro';
 import { LINKS } from '../config.js';
 import { featuredRelease, releases, releaseTypeLabel, formatDate } from '../data/releases.js';
 import { upcoming, past } from '../data/shows.js';
@@ -124,11 +125,7 @@ const nextShow = next ?? null;
       <div style="margin-top: 1.6rem">
         {nextShow ? (
           <ul class="shows">
-            <li class="show">
-              <span class="show__date">{formatDate(nextShow.date, nextShow.datePrecision)}</span>
-              <span class="show__venue">{nextShow.venue} · {nextShow.city}{nextShow.notes && <span class="show__notes">{nextShow.notes}</span>}</span>
-              <span class="show__tag">Próximo</span>
-            </li>
+            <ShowItem show={nextShow} tag="Próximo" />
           </ul>
         ) : (
           <div class="empty">
