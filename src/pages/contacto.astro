@@ -1,48 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
-import Ticker from '../components/Ticker.astro';
-import { CONTACT, PRESS, LINKS, BAND } from '../config.js';
-import { href } from '../lib.js';
-import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases.js';
+import { CONTACT, PRESS, LINKS, BAND } from '../config';
+import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases';
 ---
 
 <Base
   title="Contacto y prensa"
   description="Contacto de gracias x nada para booking, salas, promotores, prensa y colaboraciones. BIO corta y datos de la banda para medios."
+  breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Contacto y prensa' }]}
 >
   <section class="page-head wrap">
     <p class="kicker">Contacto</p>
     <h1>Habla con GxN</h1>
     <p class="lede" style="max-width: 52ch; margin-top: 1rem">
-      booking, salas, promotores, radios, zines y quien tenga curiosidad de
-      cómo sonarían en tu festival: esta es la puerta.
+      ¿Montamos un bolo? Para conciertos, prensa y colaboraciones,
+      escríbenos y hablamos.
     </p>
   </section>
 
   <section class="wrap" style="padding-bottom: clamp(2rem, 5vw, 3rem)">
     <div class="contact-blocks">
       <div class="contact-card">
-        <h3>{CONTACT.booking}</h3>
-        <p class="mono"><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p>
+        <h2>{CONTACT.booking}</h2>
+        <p>Cuéntanos la sala, la ciudad y la fecha que tienes en mente.</p>
+        <p class="mono"><a href={`mailto:${CONTACT.email}?subject=Concierto%20gracias%20x%20nada`}>{CONTACT.email}</a></p>
       </div>
       <div class="contact-card">
-        <h3>{CONTACT.press}</h3>
+        <h2>{CONTACT.press}</h2>
         <p class="mono">
           Prensa: <a href={`mailto:${CONTACT.email}?subject=Prensa%20gracias%20x%20nada`}>{CONTACT.email}</a>
         </p>
-        {PRESS.kitFile ? (
-          <p><a class="sticker sticker--red" href={PRESS.kitFile} download>Descargar press kit ↓</a></p>
-        ) : (
-          <p class="mono" style="color: rgba(20,20,15,.65)">Press kit: disponible bajo petición</p>
-        )}
+        <p><a class="text-link mono" href={`mailto:${CONTACT.email}?subject=Material%20de%20prensa%20gracias%20x%20nada`}>Pedir material de prensa ↗</a></p>
       </div>
       <div class="contact-card">
-        <h3>Redes</h3>
+        <h2>Redes</h2>
         <ul class="mono" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem">
           <li><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a></li>
-          <li><a href={LINKS.appleMusic} target="_blank" rel="noopener noreferrer">Apple Music ↗</a></li>
-          <li><a href={LINKS.youtube} target="_blank" rel="noopener noreferrer">YouTube ↗</a></li>
-          <li><a href={LINKS.tiktok} target="_blank" rel="noopener noreferrer">TikTok ↗</a></li>
           <li><a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
         </ul>
       </div>
@@ -52,7 +45,7 @@ import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases.
   <hr class="rule rule--thick" />
 
   <section class="wrap" style="padding-block: clamp(2rem, 5vw, 3.5rem)">
-    <p class="kicker">Para medios — bio corta</p>
+    <h2 class="kicker">Para medios · Bio corta</h2>
     <p class="lede" style="max-width: 62ch">{PRESS.bioShort}</p>
 
     <dl class="facts">
@@ -63,11 +56,5 @@ import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases.
       <div><dt>Último lanzamiento</dt><dd>{featuredRelease.title} ({releaseTypeLabel[featuredRelease.type]}, {formatDate(featuredRelease.date)})</dd></div>
       <div><dt>Spotify</dt><dd><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">perfil oficial ↗</a></dd></div>
     </dl>
-    <p class="mono" style="margin-top: 1rem; opacity: 0.75">
-      ⚠️ Pendiente: ficha técnica (rider, formación sobre el escenario y
-      necesidad de material real de la banda para completar la página).
-    </p>
   </section>
-
-  <Ticker items={[...Array(6).fill('booking abierto'), ...Array(6).fill('prensa bienvenida'), ...Array(6).fill('Vigo → cualquier sala')]} />
 </Base>

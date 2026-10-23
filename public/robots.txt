@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-# Sin bloqueos: indexable para buscadores y rastreadores de búsqueda
-Sitemap: https://dcarball0.github.io/gxn_web/sitemap-index.xml

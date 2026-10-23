@@ -1,14 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import Ticker from '../components/Ticker.astro';
-import { BAND, LINKS } from '../config.js';
-import { href } from '../lib.js';
+import { href } from '../lib';
 import bandFoto from '../assets/img/band-foto.webp';
 ---
 
 <Base
   title="Sobre la banda"
   description="gracias x nada (GxN) es un trío de pop punk y skate punk de Vigo, Galicia, formado en 2022. Aquí puedes leer su historia y lo que caracteriza su música."
+  breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Sobre la banda' }]}
 >
   <section class="page-head wrap">
     <p class="kicker">Sobre</p>
@@ -26,22 +25,20 @@ import bandFoto from '../assets/img/band-foto.webp';
           aguantan desde la primera escucha.
         </p>
         <p>
-          Sobre el escenario son tres: dos voces principales que se pasan los
-          versos y prestan armonía al otro. Los estribillos salen directos y
-          las letras hablan de lo personal — amistades largas, veranos cortos,
+          Dos voces se reparten los versos. Los estribillos son de quien los cante.
+          Las letras hablan de lo personal — amistades largas, veranos cortos,
           canciones de amor que no esperan nada. Cantan en castellano y en
           gallego, y el directo no necesita parafernalia: canciones y gas.
         </p>
         <p>
           Tras varios años tocando por salas y ciclos de Galicia, en 2025
           publicaron su primer EP, <em>GxN</em>: cinco canciones que resumen su
-          manera de entender el género — cortas, a fondo y con una balada
-          crepuscular de casi ocho minutos para cerrar.
+          manera de entender el género: melodías directas y guitarras a fondo,
+          con espacio para los casi ocho minutos de <em>Mañana se acaba el mundo</em>.
         </p>
         <p class="mono" style="margin-top: 1.2rem">
           Han compartido escenario con bandas como Eskravos, Trikornio,
-          Filtro, Deaf Whale o Martes Mal, y medios locales como Rouco Son
-          han seguido su sendero desde los primeros conciertos.
+          Deaf Whale o Martes Mal. El primer concierto fue en Vigo en 2022.
         </p>
         <p style="margin-top: 1.4rem">
           <a class="sticker" href={href('contacto/')}>Contacto y prensa →</a>
@@ -57,7 +54,7 @@ import bandFoto from '../assets/img/band-foto.webp';
           decoding="async"
         />
         <figcaption class="mono" style="margin-top: 0.6rem">
-          gracias x nada · Vigo · retrato oficial
+          gracias x nada · Vigo
         </figcaption>
       </figure>
     </div>
@@ -71,8 +68,4 @@ import bandFoto from '../assets/img/band-foto.webp';
       <div><dt>Últimos pasos</dt><dd>EP «GxN» (2025)</dd></div>
     </dl>
   </section>
-
-  <Ticker
-    items={[...Array(5).fill('pop punk desde Vigo'), ...Array(5).fill('desde 2022'), ...Array(5).fill('guitarras rápidas')]}
-  />
 </Base>

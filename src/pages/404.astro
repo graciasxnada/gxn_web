@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import Starburst from '../components/Starburst.astro';
-import { href } from '../lib.js';
+import { href } from '../lib';
 ---
 
-<Base title="Página no encontrada" description="Error 404: esta página de gracias x nada no existe.">
+<Base title="Página no encontrada" description="Error 404: esta página de gracias x nada no existe." noindex canonicalPath={href('404.html')}>
   <section class="section wrap" style="text-align: center; min-height: 60vh; display: grid; align-content: center">
     <Starburst class="" style="width: 90px; margin: 0 auto 1rem" />
     <p class="kicker">Error 404</p>

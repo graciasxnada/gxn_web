@@ -1,0 +1,31 @@
+---
+import { formatDate } from '../data/releases';
+import type { Release } from '../types';
+
+interface Props {
+  singles: Release['adelantos'];
+}
+
+const { singles } = Astro.props;
+---
+
+<div class="singles">
+  {singles.map((single) => (
+    <a class="single" href={single.links.spotify} target="_blank" rel="noopener noreferrer">
+      <div class="single__cover">
+        <img
+          src={single.cover.file.src}
+          alt={single.cover.alt}
+          width={single.cover.file.width}
+          height={single.cover.file.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="single__arrow" aria-hidden="true">↗</span>
+      </div>
+      <p class="kicker">Single · {formatDate(single.date)}</p>
+      <h3 class="single__title">{single.title}</h3>
+      <span class="mono single__listen">Escuchar en Spotify ↗</span>
+    </a>
+  ))}
+</div>

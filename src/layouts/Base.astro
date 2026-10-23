@@ -7,37 +7,92 @@ import '@fontsource/space-mono/latin-400-italic.css';
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { SITE, BAND, LINKS } from '../config.js';
+import { SITE, BAND, VERIFIED_ARTIST_PROFILES, SITE_INDEXABLE } from '../config';
 import bandFotoImport from '../assets/img/band-foto.webp';
+import archivoFont from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import { href } from '../lib';
 
-const { title, description, isHome = false } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  isHome?: boolean;
+  noindex?: boolean;
+  canonicalPath?: string;
+  breadcrumbs?: { label: string; href?: string }[];
+  pageJsonLd?: Record<string, unknown>[];
+  mainEntityId?: string;
+}
+
+const { title, description, isHome = false, noindex = false, canonicalPath, breadcrumbs, pageJsonLd = [], mainEntityId } = Astro.props;
 
 const siteUrl = Astro.site?.href ?? SITE.url + '/';
 const baseDir = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const baseUrl = new URL(baseDir, siteUrl);
-const currentPage = new URL(Astro.url.pathname, siteUrl).href;
+const currentPage = new URL(canonicalPath ?? Astro.url.pathname, siteUrl).href;
 
 const pageTitle = isHome
   ? `${SITE.title} — ${BAND.genre[0]} y ${BAND.genre[1]} desde Vigo`
   : `${title} — ${SITE.title}`;
 const desc = description ?? SITE.description;
 const ogUrl = new URL(SITE.ogImage, baseUrl).href;
+const artistId = `${baseUrl.href}#artist`;
+const websiteId = `${baseUrl.href}#website`;
+const pageId = `${currentPage}#webpage`;
+const breadcrumbId = `${currentPage}#breadcrumb`;
 
-// JSON-LD MusicGroup — solo hechos verificados
-const bandJsonLd = {
+// A shared entity graph keeps identity, page and release references consistent.
+const structuredData = [
+  {
   '@context': 'https://schema.org',
-  '@type': 'MusicGroup',
-  name: BAND.name,
-  description: SITE.description,
-  genre: ['Pop Punk', 'Skate Punk'],
-  foundingDate: BAND.formed,
-  foundingLocation: { '@type': 'Place', name: BAND.origin },
-  url: baseUrl.href,
-  image: new URL(bandFotoImport.src, siteUrl).href,
-  sameAs: [LINKS.spotify, LINKS.instagram, LINKS.appleMusic, LINKS.youtube, LINKS.tiktok],
-};
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: baseUrl.href,
+      name: SITE.title,
+      inLanguage: SITE.lang,
+      publisher: { '@id': artistId },
+    },
+    {
+      '@type': 'MusicGroup',
+      '@id': artistId,
+      name: BAND.name,
+      description: SITE.description,
+      genre: ['Pop Punk', 'Skate Punk'],
+      foundingDate: BAND.formed,
+      foundingLocation: { '@type': 'Place', name: BAND.origin },
+      url: baseUrl.href,
+      image: new URL(bandFotoImport.src, siteUrl).href,
+      sameAs: VERIFIED_ARTIST_PROFILES,
+    },
+    {
+      '@type': 'WebPage',
+      '@id': pageId,
+      url: currentPage,
+      name: pageTitle,
+      description: desc,
+      inLanguage: SITE.lang,
+      isPartOf: { '@id': websiteId },
+      about: { '@id': artistId },
+      ...(mainEntityId ? { mainEntity: { '@id': mainEntityId } } : {}),
+      ...(breadcrumbs?.length ? { breadcrumb: { '@id': breadcrumbId } } : {}),
+    },
+    ...(breadcrumbs?.length ? [{
+      '@type': 'BreadcrumbList',
+      '@id': breadcrumbId,
+      itemListElement: breadcrumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.label,
+        item: new URL(crumb.href ? href(crumb.href) : currentPage, siteUrl).href,
+      })),
+    }] : []),
+    ...pageJsonLd,
+  ],
+  },
+];
 
-const asset = (file) => new URL(file, baseUrl).href;
+const asset = (file: string) => href(file);
 ---
 
 <!doctype html>
@@ -45,10 +100,12 @@ const asset = (file) => new URL(file, baseUrl).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={archivoFont} as="font" type="font/woff2" crossorigin="anonymous" />
     <title>{pageTitle}</title>
     <meta name="description" content={desc} />
     <link rel="canonical" href={currentPage} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content={noindex || !SITE_INDEXABLE ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    {SITE_INDEXABLE && <link rel="sitemap" type="application/xml" href={asset('sitemap-index.xml')} />}
     <link rel="icon" type="image/svg+xml" href={asset('favicon.svg')} />
     <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />
     <link rel="manifest" href={asset('manifest.webmanifest')} />
@@ -62,40 +119,71 @@ const asset = (file) => new URL(file, baseUrl).href;
     <meta property="og:image" content={ogUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`gracias x nada — ${title ?? 'web oficial de la banda'}`} />
     <meta property="og:locale" content="es_ES" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={ogUrl} />
+    <meta name="twitter:image:alt" content={`gracias x nada — ${title ?? 'web oficial de la banda'}`} />
 
-    <script type="application/ld+json" set:html={JSON.stringify(bandJsonLd)} is:inline></script>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData[0])} is:inline></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido</a>
     <Nav />
     <main id="main">
+      {breadcrumbs?.length && (
+        <nav class="breadcrumbs wrap" aria-label="Ruta de navegación">
+          <ol>
+            {breadcrumbs.map((crumb, index) => (
+              <li>
+                {crumb.href && index < breadcrumbs.length - 1
+                  ? <a href={href(crumb.href)}>{crumb.label}</a>
+                  : <span aria-current="page">{crumb.label}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
       <slot />
     </main>
     <Footer />
     <script>
       // Menú móvil accesible
-      const burger = document.querySelector('.nav__burger');
-      const panel = document.querySelector('.nav__links');
+      const burger = document.querySelector<HTMLButtonElement>('.nav__burger');
+      const panel = document.querySelector<HTMLUListElement>('.nav__links');
       if (burger && panel) {
-        const setOpen = (open) => {
+        const mobile = window.matchMedia('(max-width: 860px)');
+        const setOpen = (open: boolean) => {
           panel.dataset.open = String(open);
+          panel.inert = mobile.matches && !open;
           burger.setAttribute('aria-expanded', String(open));
-          document.body.classList.toggle('nav-locked', open);
+          const label = burger.querySelector('[data-menu-label]');
+          if (label) label.textContent = open ? 'Cerrar menú' : 'Abrir menú';
+          document.body.classList.toggle('nav-locked', mobile.matches && open);
           if (open) panel.querySelector('a')?.focus();
         };
+        setOpen(false);
+        burger.closest('header')?.setAttribute('data-enhanced', '');
+        mobile.addEventListener('change', () => setOpen(false));
         burger.addEventListener('click', () => setOpen(panel.dataset.open !== 'true'));
         panel.addEventListener('click', (e) => {
-          if (e.target.closest('a')) setOpen(false);
+          if (e.target instanceof Element && e.target.closest('a')) setOpen(false);
         });
         window.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && panel.dataset.open === 'true') {
             burger.focus();
             setOpen(false);
+          }
+          if (e.key === 'Tab' && panel.dataset.open === 'true') {
+            const links = [burger, ...panel.querySelectorAll<HTMLAnchorElement>('a[href]')];
+            const first = links[0];
+            const last = links[links.length - 1];
+            if (first && last && ((e.shiftKey && document.activeElement === first) || (!e.shiftKey && document.activeElement === last))) {
+              e.preventDefault();
+              (e.shiftKey ? last : first).focus();
+            }
           }
         });
       }

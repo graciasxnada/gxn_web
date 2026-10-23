@@ -1,7 +1,7 @@
 ---
 import Starburst from './Starburst.astro';
-import { LINKS, NAV } from '../config.js';
-import { href, isActive, baseDir } from '../lib.js';
+import { LINKS, NAV } from '../config';
+import { href, isActive, baseDir } from '../lib';
 
 const rel = Astro.url.pathname.replace(baseDir(), '/');
 ---
@@ -9,11 +9,11 @@ const rel = Astro.url.pathname.replace(baseDir(), '/');
 <header class="topbar">
   <nav class="nav" aria-label="Navegación principal">
     <a class="nav__brand" href={href('/')}>
-      <Starburst class="star" /> gracias×nada<sup>®</sup>
+      <Starburst class="star" /> gracias×nada
     </a>
 
     <button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-menu">
-      <span class="sr-only">Menú</span>
+      <span class="sr-only" data-menu-label>Abrir menú</span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>

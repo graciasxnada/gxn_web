@@ -8,6 +8,9 @@ dist/
 # research scratch
 _research/
 
+# private documents for manual delivery
+/private/
+
 # local env
 .env
 .env.*

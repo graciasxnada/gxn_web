@@ -10,7 +10,7 @@ export const href = (path = '') => {
   return base + path.replace(/^\/+/, '');
 };
 
-export const isActive = (currentPath, path = '/') => {
+export const isActive = (currentPath: string, path = '/') => {
   const rel = '/' + currentPath.replace(baseDir(), '');
   const norm = path === '/' ? '/' : ('/' + path.replace(/^\/+|\/+$/g, '') + '/').replace('//', '/');
   if (norm === '/') return rel === '/'; // home no marca páginas de detalle

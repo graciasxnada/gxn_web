@@ -1,11 +1,15 @@
 ---
 // Cinta repetida estilo fanzine. Los items se duplican para el loop (copia aria-hidden).
+interface Props {
+  items?: string[];
+  dark?: boolean;
+}
 const { items = [], dark = false } = Astro.props;
-const list = [...items, ...items, ...items, ...items];
+const list = Array.from({ length: 4 }, () => items).flat();
 ---
 
 <div class:list={['ticker', dark && 'ticker--dark']}>
   <div class="ticker__track">
-    {list.map((item, i) => <span class="ticker__item" aria-hidden={i >= list.length / 2 ? 'true' : undefined}>{item}</span>)}
+    {list.map((item, i) => <span class="ticker__item" aria-hidden={i >= items.length ? 'true' : undefined}>{item}</span>)}
   </div>
 </div>

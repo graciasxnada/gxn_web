@@ -1,21 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
-import { releases } from '../data/releases.js';
-import { href } from '../lib.js';
+import SingleGrid from '../components/SingleGrid.astro';
+import { releases } from '../data/releases';
+import { LINKS } from '../config';
 ---
 
 <Base
   title="Música"
   description="Discografía de gracias x nada: el EP GxN (2025), con los singles de adelanto Incomprendidos, Canción de amor adolescente y Entiéndeme, con fecha, temas y enlaces para escuchar."
+  breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Música' }]}
 >
   <section class="page-head wrap">
     <p class="kicker">Catálogo GXN</p>
     <h1>Discografía</h1>
     <p class="lede" style="max-width: 52ch; margin-top: 1rem">
-      Todo lo publicado por gracias x nada, en orden inverso al calendario.
-      Cada ficha incluye lo que sabemos de cada lanzamiento: fecha, temas
-      y dónde escucharlo. Cuando la banda publicó algo nuevo, suma una línea aquí.
+      Cinco canciones, un primer EP y los singles que abrieron camino.
+      Dale al play.
     </p>
   </section>
 
@@ -26,16 +27,24 @@ import { href } from '../lib.js';
       {releases.map(r => r.code).join(' · ')}
     </p>
     <div>
-      {releases.map((r) => <ReleaseCard release={r} />)}
+      {releases.map((r) => <ReleaseCard release={r} heading="h2" />)}
     </div>
+    {releases.filter((release) => release.adelantos.length > 0).map((release) => (
+      <section class="catalog-singles" aria-label={`Singles de ${release.title}`}>
+        <h2 class="kicker">Adelantos de {release.title}</h2>
+        <SingleGrid singles={release.adelantos} />
+      </section>
+    ))}
   </section>
 
   <hr class="rule" />
 
   <section class="wrap" style="padding-block: clamp(2rem, 5vw, 3.5rem)">
-    <p class="mono">
-      Los enlaces llevan a Spotify, el único servicio publicado por la banda.
-      Cuando haya Apple Music, YouTube o Bandcamp, se añadirán en cada ficha.
-    </p>
+    <div class="section-heading">
+      <h2 class="kicker">Escúchanos donde quieras</h2>
+      <div class="platform-links mono">
+        <a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a>
+      </div>
+    </div>
   </section>
 </Base>

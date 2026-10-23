@@ -15,11 +15,12 @@
  */
 
 import coverGxN from '../assets/img/cover-ep-gxn.webp';
+import type { Release } from '../types';
 import coverEntiendeme from '../assets/img/cover-entiendeme.webp';
 import coverCancionAmor from '../assets/img/cover-cancion-amor.webp';
 import coverIncomprendidos from '../assets/img/cover-incomprendidos.webp';
 
-export const releases = [
+export const releases: Release[] = [
   {
     slug: 'gxn-ep',
     title: 'GxN',
@@ -28,7 +29,7 @@ export const releases = [
     cover: { file: coverGxN, alt: 'Portada del EP GxN de gracias x nada: explosión de cómic amarilla sobre papel verde arrugado, con las letras rojas GXN' },
     featured: true,
     description:
-      'Primer EP de gracias x nada. Cinco canciones que condensan lo que suena en los directos desde 2022: principios de pop punk noventero, dos voces que se pasan el micrófono y una balada crepuscular de casi ocho minutos para cerrar.',
+      'Primer EP de gracias x nada. Cinco canciones de pop punk melódico, dos voces que se pasan el micrófono y guitarras que van a fondo. De los dos minutos de Canción de amor adolescente a los casi ocho de Mañana se acaba el mundo.',
     tracks: [
       { title: 'Incomprendidos', duration: '3:36' },
       { title: 'Atardecer', duration: '3:22' },
@@ -38,7 +39,7 @@ export const releases = [
     ],
     credits: [
       'Grabado, mezclado y masterizado por deica durante 2024.',
-      'Entiéndeme cuenta con kinss y deica (según créditos de Spotify).',
+      'Con kinss y deica en Entiéndeme.',
     ],
     links: {
       spotify: 'https://open.spotify.com/album/7laXnCkDjHBuUPjJnX9U16',
@@ -62,7 +63,7 @@ export const releases = [
       {
         title: 'Entiéndeme',
         date: '2025-01-04',
-        note: 'con kinss y deica (créditos de Spotify)',
+        note: 'con kinss y deica',
         cover: { file: coverEntiendeme, alt: 'Portada del single Entiéndeme: silueta de un perro dentro de una explosión cómic amarilla sobre papel verde con huellas' },
         links: { spotify: 'https://open.spotify.com/album/6RItaNJN4852THxFD22XQN' },
       },
@@ -73,9 +74,9 @@ export const releases = [
 /** El EP destacado en home */
 export const featuredRelease = releases.find((r) => r.featured) ?? releases[0];
 
-export const releaseTypeLabel = { single: 'Single', ep: 'EP', album: 'Álbum' };
+export const releaseTypeLabel: Record<Release['type'], string> = { single: 'Single', ep: 'EP', album: 'Álbum' };
 
-export function formatDate(iso) {
+export function formatDate(iso: string) {
   const [y, m, d] = iso.split('-').map(Number);
   const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   return `${d} ${meses[m - 1]} ${y}`;

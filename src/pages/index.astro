@@ -2,12 +2,11 @@
 import Base from '../layouts/Base.astro';
 import Starburst from '../components/Starburst.astro';
 import Ticker from '../components/Ticker.astro';
-import ReleaseCard from '../components/ReleaseCard.astro';
+import SingleGrid from '../components/SingleGrid.astro';
 import ShowItem from '../components/ShowItem.astro';
-import { LINKS } from '../config.js';
-import { featuredRelease, releases, releaseTypeLabel, formatDate } from '../data/releases.js';
-import { upcoming, past } from '../data/shows.js';
-import { href } from '../lib.js';
+import { featuredRelease, releaseTypeLabel, formatDate } from '../data/releases';
+import { upcoming, formatDate as formatShowDate } from '../data/shows';
+import { href } from '../lib';
 import banner from '../assets/img/banner.webp';
 import bandFoto from '../assets/img/band-foto.webp';
 
@@ -17,7 +16,7 @@ const nextShow = next ?? null;
 // Cinta bajo el hero: el próximo concierto (o el nombre si no hay fechas).
 const cintaProximo = nextShow
   ? [
-      `Próximo bolo · ${formatDate(nextShow.date, nextShow.datePrecision)}`,
+      `Próximo bolo · ${formatShowDate(nextShow.date, nextShow.datePrecision)}`,
       `${nextShow.venue} · ${nextShow.city}`,
       ...(nextShow.ticketNote ? [nextShow.ticketNote] : []),
     ]
@@ -29,29 +28,46 @@ const cintaProximo = nextShow
     <div class="hero__bg">
       <img
         src={banner.src}
+        width={banner.width}
+        height={banner.height}
         alt="gracias x nada, de pie sobre una tabla en el skatepark de Vigo, retrato panorámico"
         fetchpriority="high"
         decoding="async"
       />
     </div>
-    <Starburst class="hero__badge" />
+    <div class="hero__badge" aria-hidden="true">
+      <Starburst />
+      <span>Desde<strong>2022</strong></span>
+    </div>
     <div class="hero__inner">
+      <p class="kicker hero__eyebrow">Pop punk / Skate punk · Vigo</p>
       <h1 class="hero__title display">
         gracias<br /><span class="x">×</span> nada
       </h1>
       <p class="hero__tagline lede">
-        Pop punk y skate punk desde Vigo, Galicia. Guitarras rápidas, estribillos directos y canciones para cantar mal con el corazón bien.
+        Guitarras rápidas. Estribillos directos.<br />Desde Vigo, con todo.
       </p>
       <div class="hero__cta">
-        <a class="sticker" href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Escuchar en Spotify ↗</a>
-        <a class="sticker sticker--red" href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
-        <a class="sticker sticker--dark" href={href('musica/')}>Ver la música</a>
+        <a class="sticker" href={featuredRelease.links.spotify} target="_blank" rel="noopener noreferrer">Escuchar GxN ↗</a>
+        <a class="sticker sticker--dark" href={href('directo/')}>Ver conciertos →</a>
       </div>
-      <p class="hero__meta mono">Vigo, Galicia · desde 2022 · tres sobre el escenario</p>
+      <a class="hero__meta mono" href={href('sobre/')}>Tocamos tres. Cantamos unos cuantos más. Conoce la banda ↗</a>
     </div>
   </section>
 
   <Ticker items={cintaProximo} />
+
+  {nextShow && (
+    <section class="next-show" aria-labelledby="next-show-title">
+      <div class="wrap next-show__inner">
+        <h2 id="next-show-title" class="kicker">Nos vemos en<br /><span>el próximo bolo</span></h2>
+        <ul class="shows">
+          <ShowItem show={nextShow} tag="Próximo" />
+        </ul>
+        <a class="text-link mono" href={href('directo/')}>Todas las fechas →</a>
+      </div>
+    </section>
+  )}
 
   <section class="section feature" aria-labelledby="featured-title">
     <div class="wrap feature__grid">
@@ -61,7 +77,7 @@ const cintaProximo = nextShow
           alt={featuredRelease.cover.alt}
           width="640"
           height="640"
-          loading="eager"
+          loading="lazy"
           decoding="async"
         />
         <span class="sticker feature__sticker sticker--red">{releaseTypeLabel[featuredRelease.type]} · {formatDate(featuredRelease.date)}</span>
@@ -81,24 +97,22 @@ const cintaProximo = nextShow
         </ol>
         <p style="margin-top: 1.6rem; display: flex; gap: 0.9rem; flex-wrap: wrap">
           <a class="sticker" href={featuredRelease.links.spotify} target="_blank" rel="noopener noreferrer">Escuchar el EP ↗</a>
-          <a class="sticker sticker--dark" href={href(`musica/${featuredRelease.slug}/`)}>Ficha completa del EP</a>
+          <a class="sticker sticker--dark" href={href(`musica/${featuredRelease.slug}/`)}>Dentro del EP →</a>
         </p>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="discos-title">
+  <section class="section" aria-labelledby="singles-title">
     <div class="wrap">
-      <div class="page-head" style="padding: 0">
-        <p class="kicker">Catálogo GXN</p>
-        <h2 id="discos-title" class="section-title">Discos</h2>
+      <div class="section-heading">
+        <div>
+          <p class="kicker">Los primeros singles</p>
+          <h2 id="singles-title" class="section-title">Antes del EP</h2>
+        </div>
+        <a class="text-link mono" href={href('musica/')}>Toda la música →</a>
       </div>
-      <div>
-        {releases.map((r) => <ReleaseCard release={r} />)}
-      </div>
-      <p style="margin-top: 1.4rem">
-        <a class="sticker sticker--green" href={href('musica/')}>Toda la música →</a>
-      </p>
+      <SingleGrid singles={featuredRelease.adelantos} />
     </div>
   </section>
 
@@ -111,7 +125,7 @@ const cintaProximo = nextShow
           gracias x nada son un trío de Vigo que toca pop punk y skate punk
           desde 2022. Se apoyan en el punk melódico de finales de los 90
           y los 2000: dos voces que se reparten los versos, canciones cortas
-          y directas y letras que hablan de lo que pasa entre la rampa y la
+          y directas y letras que hablan de lo que pasa entre el parque y la
           última canción de la noche.
         </p>
         <p style="margin-top: 1.6rem">
@@ -125,29 +139,23 @@ const cintaProximo = nextShow
     </div>
   </section>
 
-  <section class="section" aria-labelledby="directo-title">
+  {!nextShow && <section class="section" aria-labelledby="directo-title">
     <div class="wrap">
       <p class="kicker">En directo</p>
       <h2 id="directo-title" class="section-title">Próximos conciertos</h2>
       <div style="margin-top: 1.6rem">
-        {nextShow ? (
-          <ul class="shows">
-            <ShowItem show={nextShow} tag="Próximo" />
-          </ul>
-        ) : (
-          <div class="empty">
-            <Starburst class="empty__star" />
-            <p class="lede" style="margin: 0 0 0.6rem">
-              No hay fechas anunciadas... todavía.
-            </p>
-            <p class="mono">Sala, promotor o festival: para traer GxN a tu escenario, escríbenos.</p>
-            <p style="margin-top: 1rem; display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap">
-              <a class="sticker" href={href('contacto/')}>Contacto →</a>
-              <a class="sticker sticker--green" href={href('directo/')}>Ver lo pasado</a>
-            </p>
-          </div>
-        )}
+        <div class="empty">
+          <Starburst class="empty__star" />
+          <p class="lede" style="margin: 0 0 0.6rem">
+            No hay fechas anunciadas... todavía.
+          </p>
+          <p class="mono">Sala, promotor o festival: para traer GxN a tu escenario, escríbenos.</p>
+          <p style="margin-top: 1rem; display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap">
+            <a class="sticker" href={href('contacto/')}>Contacto →</a>
+            <a class="sticker sticker--green" href={href('directo/')}>Ver conciertos pasados</a>
+          </p>
+        </div>
       </div>
     </div>
-  </section>
+  </section>}
 </Base>

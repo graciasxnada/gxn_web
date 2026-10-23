@@ -1,12 +1,19 @@
 ---
-import { formatDate } from '../data/shows.js';
+import { formatDate } from '../data/shows';
+import type { Show } from '../types';
 
-const { show, tag = 'Pasado' } = Astro.props;
+interface Props {
+  show: Show;
+  tag?: string;
+  id?: string;
+}
+
+const { show, tag = 'Pasado', id } = Astro.props;
 const ctaUrl = show.ticketUrl ?? show.infoUrl;
 const ctaLabel = show.ticketUrl ? 'Entradas' : 'Anuncio';
 ---
 
-<li class="show">
+<li class="show" id={id}>
   <span class="show__date">{formatDate(show.date, show.datePrecision)}</span>
   <span class="show__venue">
     {show.venue} · {show.city}

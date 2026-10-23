@@ -1,13 +1,12 @@
 ---
-import Starburst from './Starburst.astro';
-import { SITE, LINKS, CONTACT, NAV } from '../config.js';
-import { href } from '../lib.js';
+import { LINKS, CONTACT, NAV } from '../config';
+import { href } from '../lib';
 import Ticker from './Ticker.astro';
 
 const year = new Date().getFullYear();
 ---
 
-<Ticker dark items={Array(14).fill('gracias × nada')} />
+<Ticker dark items={['gracias × nada', 'Pop punk desde Vigo', 'Desde 2022']} />
 <footer class="footer">
   <div class="footer__inner">
     <div>
@@ -15,7 +14,7 @@ const year = new Date().getFullYear();
         <span style="color: var(--yellow)">gracias</span> × nada
       </h2>
       <p class="mono">
-        Trío de pop punk y skate punk desde Vigo, Galicia. Formada en 2022.
+        Trío de pop punk y skate punk desde Vigo, Galicia. Desde 2022.
       </p>
       <a class="sticker sticker--dark" href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Escuchar en Spotify ↗</a>
     </div>
@@ -29,9 +28,6 @@ const year = new Date().getFullYear();
       <h3 class="kicker" style="color: var(--yellow)">Redes y contacto</h3>
       <ul>
         <li><a href={LINKS.spotify} target="_blank" rel="noopener noreferrer">Spotify ↗</a></li>
-        <li><a href={LINKS.appleMusic} target="_blank" rel="noopener noreferrer">Apple Music ↗</a></li>
-        <li><a href={LINKS.youtube} target="_blank" rel="noopener noreferrer">YouTube ↗</a></li>
-        <li><a href={LINKS.tiktok} target="_blank" rel="noopener noreferrer">TikTok ↗</a></li>
         <li><a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
         <li><a href={href('/contacto/')}>Contacto y prensa</a></li>
       </ul>

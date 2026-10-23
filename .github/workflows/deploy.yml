@@ -22,30 +22,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Instalar dependencias
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: QA (enlaces, SEO, JSON-LD, redes)
-        run: npm run qa
+        uses: actions/checkout@v7
 
       - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v5
 
-      - name: Subir artefacto
-        uses: actions/upload-pages-artifact@v3
+      - name: Instalar, comprobar y construir con Astro
+        uses: withastro/action@v6
+        env:
+          SITE_URL: ${{ vars.SITE_URL || steps.pages.outputs.origin }}
+          SITE_BASE: ${{ vars.SITE_BASE || steps.pages.outputs.base_path || '/' }}
+          SITE_INDEXABLE: 'true'
         with:
-          path: dist
+          node-version: 24
+          build-cmd: npm run check && npm run test:qa
 
   deploy:
     needs: build
@@ -56,4 +47,4 @@ jobs:
     steps:
       - name: Publicar
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

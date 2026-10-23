@@ -1,49 +1,56 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Starburst from '../../components/Starburst.astro';
-import { releases, releaseTypeLabel, formatDate } from '../../data/releases.js';
-import { href, baseDir } from '../../lib.js';
-import { BAND, LINKS, SITE } from '../../config.js';
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { releases, releaseTypeLabel, formatDate } from '../../data/releases';
+import { href, baseDir } from '../../lib';
+import { LINKS, SITE } from '../../config';
 
-export function getStaticPaths() {
+export const getStaticPaths = (() => {
   return releases.map((release) => ({ params: { slug: release.slug }, props: { release } }));
-}
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { release } = Astro.props;
 const baseRoot = new URL(baseDir(), Astro.site?.href ?? SITE.url + '/');
 const isSoloRelease = releases.filter((r) => r.slug !== release.slug).length === 0;
 
-// JSON-LD MusicRelease — solo datos del catálogo publicado
+// Structured album and track entities use permanent IDs tied to this URL.
 const cover = release.cover.file;
-const relJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'MusicRelease',
+const albumId = new URL(`musica/${release.slug}/#album`, baseRoot).href;
+const releaseUrl = new URL(`musica/${release.slug}/`, baseRoot).href;
+const trackRecords = release.tracks.map((track, index) => ({
+  '@type': 'MusicRecording',
+  '@id': `${releaseUrl}#track-${index + 1}`,
+  name: track.title,
+  duration: `PT${Number(track.duration.split(':')[0])}M${Number(track.duration.split(':')[1])}S`,
+  byArtist: { '@id': `${baseRoot.href}#artist` },
+  inAlbum: { '@id': albumId },
+}));
+const albumJsonLd = {
+  '@type': 'MusicAlbum',
+  '@id': albumId,
   name: release.title,
-  byArtist: { '@type': 'MusicGroup', name: BAND.name },
   datePublished: release.date,
-  musicReleaseType: release.type === 'ep' ? 'EP' : 'Single',
+  musicReleaseFormat: 'https://schema.org/DigitalFormat',
+  albumReleaseType: `https://schema.org/${{ ep: 'EPRelease', single: 'SingleRelease', album: 'AlbumRelease' }[release.type]}`,
+  byArtist: { '@id': `${baseRoot.href}#artist` },
   numTracks: release.tracks.length,
-  track: release.tracks.map((t) => ({
-    '@type': 'MusicRecording',
-    name: t.title,
-    duration: 'PT' + (t.duration.split(':')[0] | 0) + 'M' + t.duration.split(':')[1] + 'S',
-  })),
-  url: new URL(`musica/${release.slug}/`, baseRoot).href,
+  track: trackRecords.map((track) => ({ '@id': track['@id'] })),
+  url: releaseUrl,
   sameAs: [release.links?.spotify].filter(Boolean),
-  image: new URL(cover.src, baseRoot).href,
+  image: new URL(cover.src, Astro.site?.href ?? SITE.url + '/').href,
 };
 ---
 
 <Base
   title={`${release.title} (${releaseTypeLabel[release.type]}, ${release.date.slice(0, 4)}) · Música`}
   description={release.description}
+  breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Música', href: 'musica/' }, { label: release.title }]}
+  pageJsonLd={[albumJsonLd, ...trackRecords]}
+  mainEntityId={albumId}
 >
   <div class="page-head wrap">
-    <p class="byline-mark">
-      <Starburst class="star" />
-      <a href={href('musica/')}>Música</a>
-      &gt; {release.code}
-    </p>
     <h1>{release.title}</h1>
     <p class="kicker" style="margin-top: 0.9rem">
       {releaseTypeLabel[release.type]} · {formatDate(release.date)} · {release.code}
@@ -124,17 +131,13 @@ const relJsonLd = {
 
         {release.links?.spotify && (
           <div class="embed">
-            <p class="mono duration-note">
-              Reproductor de Spotify. Si no carga, usa el botón «Escuchar en Spotify».
-            </p>
             <iframe
               src={release.links.spotify.replace('https://open.spotify.com/', 'https://open.spotify.com/embed/')}
               width="100%"
-              height="232"
-              frameborder="0"
+              height="352"
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
-              title="Reproductor de Spotify"></iframe>
+              title={`Escuchar ${release.title} de gracias x nada en Spotify`}></iframe>
           </div>
         )}
       </div>
@@ -167,6 +170,5 @@ const relJsonLd = {
     </>
   )}
 
-  <script type="application/ld+json" set:html={JSON.stringify(relJsonLd)} is:inline></script>
 </Base>
 

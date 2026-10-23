@@ -11,7 +11,9 @@
  * anuncio (Instagram, cartel, etc.).
  */
 
-export const upcoming = [
+import type { DatePrecision, Show } from '../types';
+
+export const upcoming: Show[] = [
   {
     date: '2026-11-13',
     datePrecision: 'day',
@@ -24,7 +26,7 @@ export const upcoming = [
   },
 ];
 
-export const past = [
+export const past: Show[] = [
   {
     date: '2026-08-28',
     datePrecision: 'day',
@@ -83,13 +85,13 @@ export const past = [
   },
 ];
 
-export function formatDate(iso, precision = 'day') {
+export function formatDate(iso: string, precision: DatePrecision = 'day') {
   const [y, m, d] = iso.split('-').map(Number);
   const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   if (precision === 'month') return `${meses[m - 1]} ${y}`;
   return `${d} ${meses[m - 1]} ${y}`;
 }
 
-export function formatYear(iso) {
+export function formatYear(iso: string) {
   return iso.split('-')[0];
 }

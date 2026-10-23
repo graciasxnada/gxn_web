@@ -1,16 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
+import type { ImageMetadata } from 'astro';
 import Starburst from '../components/Starburst.astro';
 import ShowItem from '../components/ShowItem.astro';
-import { upcoming, past } from '../data/shows.js';
-import { href } from '../lib.js';
-import { LINKS } from '../config.js';
+import { upcoming, past } from '../data/shows';
+import { href } from '../lib';
+import { BAND, LINKS, SITE, SITE_INDEXABLE } from '../config';
 
 const hrefInstagram = LINKS.instagram;
+const siteBase = new URL(import.meta.env.BASE_URL, Astro.site?.href ?? SITE.url + '/');
+const eventJsonLd = upcoming.map((show, index) => ({
+  '@type': 'MusicEvent',
+  '@id': new URL(`directo/#evento-${show.date}-${index + 1}`, siteBase).href,
+  name: `${BAND.name} en ${show.venue}`,
+  startDate: show.date,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: {
+    '@type': 'Place',
+    name: show.venue,
+    address: { '@type': 'PostalAddress', addressLocality: show.city, addressCountry: 'ES' },
+  },
+  performer: { '@id': `${siteBase.href}#artist` },
+  ...(show.infoUrl ? { url: show.infoUrl } : {}),
+}));
 
 // Imágenes de directo — suelta webp en src/assets/img/directo/ y aparecen aquí.
-const fotos = import.meta.glob('../assets/img/directo/*.webp', { eager: true, import: 'default' });
-const pick = (prefix) =>
+const fotos = import.meta.glob<ImageMetadata>('../assets/img/directo/*.webp', { eager: true, import: 'default' });
+const pick = (prefix: string) =>
   Object.keys(fotos)
     .filter((k) => k.includes('/' + prefix + '-'))
     .sort()
@@ -33,13 +50,14 @@ const gruposFotos = [
 <Base
   title="Directo"
   description="Conciertos de gracias x nada: próximas fechas y conciertos pasados en salas como SalaSon, Sala Moon, El Contrabajo o Sala Mardi Gras."
+  breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Directo' }]}
+  pageJsonLd={SITE_INDEXABLE ? eventJsonLd : []}
 >
   <section class="page-head wrap">
     <p class="kicker">Directo</p>
     <h1>Conciertos</h1>
     <p class="lede" style="max-width: 48ch; margin-top: 1rem">
-      Las fechas confirmadas, arriba; los conciertos pasados, debajo.
-      Cuando haya nueva fecha, se cuelga aquí y en Instagram.
+      Tres sobre el escenario, guitarras y gas. Aquí nos vemos.
     </p>
   </section>
 
@@ -47,10 +65,11 @@ const gruposFotos = [
     <h2 class="kicker" style="color: var(--red)">Próximas fechas</h2>
     {upcoming.length > 0 ? (
       <ul class="shows">
-        {upcoming.map((show) => (
+        {upcoming.map((show, index) => (
           <ShowItem
             show={show}
             tag={show.ticketUrl ? 'Entradas' : 'Próximo'}
+            id={`evento-${show.date}-${index + 1}`}
           />
         ))}
       </ul>
@@ -75,10 +94,6 @@ const gruposFotos = [
     <ul class="shows">
       {past.map((show) => <ShowItem show={show} tag="Pasado" />)}
     </ul>
-    <p class="mono" style="margin-top: 1rem; opacity: 0.75">
-      Fechas recogidas de carteleras, prensa local y la propia banda.
-      Si falta alguno, no fue olvidado a propósito: escríbenos y lo añadimos.
-    </p>
   </section>
 
   <section class="section" aria-labelledby="fotos-title" style="padding-top: 0">
@@ -91,6 +106,8 @@ const gruposFotos = [
             {grupo.fotos.map((foto) => (
               <img
                 src={foto.src}
+                width={foto.width}
+                height={foto.height}
                 alt={grupo.alt}
                 loading="lazy"
                 decoding="async"

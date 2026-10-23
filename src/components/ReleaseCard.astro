@@ -1,20 +1,26 @@
 ---
-import { releaseTypeLabel, formatDate } from '../data/releases.js';
-import { href } from '../lib.js';
+import { releaseTypeLabel, formatDate } from '../data/releases';
+import { href } from '../lib';
+import type { Release } from '../types';
 
-const { release } = Astro.props;
+interface Props {
+  release: Release;
+  heading?: 'h2' | 'h3';
+}
+
+const { release, heading: Heading = 'h3' } = Astro.props;
 const label = releaseTypeLabel[release.type];
-const cover = release.cover?.file ?? release.cover;
-const coverAlt = release.cover?.alt || `Portada de ${release.title}`;
+const cover = release.cover.file;
+const coverAlt = release.cover.alt;
 ---
 
 <a class="release-low" href={href(`musica/${release.slug}/`)}>
   <div class="release-low__cover" data-code={release.code}>
-    <img src={cover?.src ?? cover} alt={coverAlt} width="640" height="640" loading="lazy" decoding="async" />
+    <img src={cover.src} alt={coverAlt} width="640" height="640" loading="lazy" decoding="async" />
   </div>
   <div>
     <p class="kicker">{label} · {formatDate(release.date)}</p>
-    <h3 class="release-low__title display">{release.title}</h3>
+    <Heading class="release-low__title display">{release.title}</Heading>
     <p class="mono" style="margin-top: 0.8rem">
       {release.tracks.length === 1 ? '1 canción' : `${release.tracks.length} canciones`} · ver ficha →
     </p>
