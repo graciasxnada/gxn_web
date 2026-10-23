@@ -53,7 +53,7 @@ export const past: Show[] = [
     datePrecision: 'day',
     venue: 'Sala Mardi Gras',
     city: 'A Coruña',
-    notes: 'con Martes Mal — programación Mardi Gras',
+    notes: 'con Martes Mal (programación Mardi Gras)',
   },
   {
     date: '2024-08-31',
@@ -81,7 +81,7 @@ export const past: Show[] = [
     datePrecision: 'month',
     venue: 'Sala Molotov',
     city: 'Vigo',
-    notes: 'primer concierto — Grupos de Vigo en Loita',
+    notes: 'primer concierto (Grupos de Vigo en Loita)',
   },
 ];
 
