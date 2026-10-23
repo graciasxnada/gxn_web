@@ -41,6 +41,7 @@ export const SITE_ROOT = new URL(SITE.base === '/' ? '/' : `${SITE.base}/`, SITE
 export const LINKS = {
   spotify: 'https://open.spotify.com/artist/4PU43GQny4NK07FvQ3VLGs',
   instagram: 'https://www.instagram.com/graciasxnada_/',
+  tiktok: 'https://www.tiktok.com/@graciasxnada_',
   liveVideo: 'https://youtu.be/y3B9V_Z0yWA',
   spotifyHandle: 'gracias x nada',
   instagramHandle: '@graciasxnada_',
@@ -50,7 +51,7 @@ export const LINKS = {
  * Contacto.
  */
 export const CONTACT = {
-  email: 'graciasxnadagrupo@gmail.com',
+  email: 'contacto@graciasxnada.es',
   booking: 'Booking, salas y promotores',
   press: 'Prensa, radios y colaboraciones',
 };
@@ -68,7 +69,7 @@ export const NAV = [
 ];
 
 /** Canonical artist profiles confirmed by the band. */
-export const VERIFIED_ARTIST_PROFILES = [LINKS.spotify, LINKS.instagram];
+export const VERIFIED_ARTIST_PROFILES = [LINKS.spotify, LINKS.instagram, LINKS.tiktok];
 
 /**
  * Optional switch for temporary deployments. Production builds should set
