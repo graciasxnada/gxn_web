@@ -97,7 +97,7 @@ const isPast = past.some((entry) => entry.slug === show.slug);
         </div>
       )}
       <div class="event__actions">
-        {show.ticketUrl && <a class="sticker" href={show.ticketUrl} target="_blank" rel="noopener noreferrer">Entradas ↗</a>}
+        {show.ticketUrl && <a class="sticker" href={show.ticketUrl} target="_blank" rel="noopener noreferrer">{isPast ? 'Ver evento y ticketing' : 'Entradas'} ↗</a>}
         {show.infoUrl && <a class:list={['sticker', { 'sticker--dark': show.ticketUrl }]} href={show.infoUrl} target="_blank" rel="noopener noreferrer">Anuncio del concierto ↗</a>}
       </div>
     </div>

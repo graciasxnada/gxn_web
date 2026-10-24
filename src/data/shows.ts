@@ -61,6 +61,7 @@ export const past: Show[] = [
     venue: 'Ocean Rock Bar',
     city: 'Vigo',
     notes: 'con Five Star Service and the Black-Suited Ladies',
+    ticketUrl: 'https://www.bandsintown.com/e/108786347',
     poster: {
       src: '/carteles/vigo27ago.jpg',
       alt: 'Cartel de gracias x nada con Five Star Service y Black-Suited Ladies en Ocean Rock Bar, Vigo, el 27 de agosto de 2026',
