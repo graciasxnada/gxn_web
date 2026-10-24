@@ -30,6 +30,7 @@ const eventJsonLd = {
   image: [new URL(show.poster ? href(show.poster.src) : gallery?.photos[0]?.src ?? bandFoto.src, siteBase).href],
   startDate: show.startDate ?? show.date,
   ...(show.doorTime ? { doorTime: show.doorTime } : {}),
+  ...(show.tour ? { superEvent: { '@type': 'EventSeries', name: show.tour } } : {}),
   ...(show.endDate ? { endDate: show.endDate } : {}),
   ...(show.organizer ? { organizer: {
     ...(show.organizer.url === siteBase.href ? { '@id': `${siteBase.href}#artist` } : { '@type': 'Organization' }),
@@ -61,11 +62,11 @@ const doorLabel = show.doorTime ? new Intl.DateTimeFormat('es-ES', {
   hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid',
 }).format(new Date(show.doorTime)) : undefined;
 const dateParts = formatDate(show.date, show.datePrecision).split(' ');
-const startLabel = show.startDate ? new Intl.DateTimeFormat('es-ES', {
-  hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid',
-}).format(new Date(show.startDate)) : undefined;
 const hasExactDay = show.datePrecision !== 'month';
 const isPast = past.some((entry) => entry.slug === show.slug);
+const mapQuery = [show.venue, show.address?.streetAddress, show.address?.postalCode, show.city, show.address?.addressRegion].filter(Boolean).join(', ');
+const mapUrl = `https://www.google.com/maps/search/?${new URLSearchParams({ api: '1', query: mapQuery })}`;
+const mapEmbedUrl = `https://maps.google.com/maps?${new URLSearchParams({ q: mapQuery, output: 'embed' })}`;
 ---
 
 <Base
@@ -92,7 +93,8 @@ const isPast = past.some((entry) => entry.slug === show.slug);
       </div>
       <h1>{BAND.name}</h1>
       {show.notes && <p class="event__lineup">{show.notes}</p>}
-      {(show.ticketNote || show.ticketPrice !== undefined || show.organizer || show.endDate || show.doorTime || show.startDate) && (
+      {show.tour && <p class="mono">{show.tour}</p>}
+      {(show.ticketNote || show.ticketPrice !== undefined || show.endDate || show.doorTime) && (
         <div class="event__practical">
           {(show.ticketNote || show.ticketPrice !== undefined) && (
             <div>
@@ -101,15 +103,15 @@ const isPast = past.some((entry) => entry.slug === show.slug);
               {show.ticketPrice !== undefined && <p class="event__price">{show.ticketPrice === 0 ? 'Gratis' : `${show.ticketPrice} €`}</p>}
             </div>
           )}
-          {(show.organizer || show.endDate || show.doorTime || show.startDate) && <dl class="event__extra">
+          {(show.endDate || show.doorTime) && <dl class="event__extra">
             {show.doorTime && <div><dt>Apertura de puertas</dt><dd><time datetime={show.doorTime}>{doorLabel}</time></dd></div>}
-            {show.startDate && <div><dt>Comienzo</dt><dd><time datetime={show.startDate}>{startLabel}</time></dd></div>}
-            {show.organizer && <div><dt>Organiza</dt><dd>{show.organizer.name}</dd></div>}
             {show.endDate && <div><dt>Finalización</dt><dd><time datetime={show.endDate}>{endLabel}</time></dd></div>}
           </dl>}
         </div>
       )}
       <div class="event__actions">
+        {show.address && <a class="sticker sticker--dark" href={mapUrl} target="_blank" rel="noopener noreferrer">Cómo llegar ↗</a>}
+        {!isPast && show.startDate && <a class="sticker" href={href(`directo/${show.slug}.ics`)} download={`${show.slug}.ics`}>Añadir al calendario ↓</a>}
         {show.ticketUrl && <a class="sticker" href={show.ticketUrl} target="_blank" rel="noopener noreferrer">{isPast ? 'Ver evento y ticketing' : 'Entradas'} ↗</a>}
         {show.infoUrl && <a class:list={['sticker', { 'sticker--dark': show.ticketUrl }]} href={show.infoUrl} target="_blank" rel="noopener noreferrer">Anuncio del concierto ↗</a>}
       </div>
@@ -117,6 +119,13 @@ const isPast = past.some((entry) => entry.slug === show.slug);
     {show.poster && <PosterViewer {...show.poster} src={href(show.poster.src)} />}
     <a class="text-link mono event__back" href={href('/directo/')}>← Todas las fechas</a>
   </section>
+  {show.address && (
+    <section class="wrap event-map" aria-labelledby="event-map-title">
+      <h2 id="event-map-title" class="kicker">Dónde es · {show.venue}</h2>
+      <iframe src={mapEmbedUrl} title={`Mapa de ${show.venue}, ${show.city}`} width="100%" height="320" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <p><a class="text-link mono" href={mapUrl} target="_blank" rel="noopener noreferrer">Abrir en Google Maps ↗</a></p>
+    </section>
+  )}
   {gallery && gallery.photos.length > 0 && (
     <section class="wrap event-gallery" aria-labelledby="event-photos-title">
       <h2 id="event-photos-title" class="section-title">Fotos del concierto</h2>
@@ -130,6 +139,8 @@ const isPast = past.some((entry) => entry.slug === show.slug);
 </Base>
 
 <style>
+  .event-map { padding-bottom: var(--section-gap); }
+  .event-map iframe { display: block; border: 2px solid var(--ink); margin-top: 1rem; }
   .event-gallery { padding-bottom: var(--section-gap); }
   .event-gallery .fotos { margin-top: 2rem; }
   .event {

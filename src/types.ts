@@ -49,6 +49,7 @@ export interface Show {
   startDate?: string;
   address?: { streetAddress: string; postalCode: string; addressRegion: string };
   organizer?: { name: string; url?: string };
+  tour?: string;
   ticketPrice?: number;
   poster?: { src: string; alt: string; width: number; height: number };
 }

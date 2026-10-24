@@ -887,6 +887,7 @@ h2 {
 
 .next-show .show {
   grid-template-columns: minmax(7rem, 0.6fr) minmax(0, 1fr) auto;
+  align-items: center;
   border-bottom: 0;
   gap: 1.4rem;
 }

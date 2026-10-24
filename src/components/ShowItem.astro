@@ -7,9 +7,10 @@ interface Props {
   show: Show;
   tag?: string;
   id?: string;
+  compact?: boolean;
 }
 
-const { show, tag = 'Pasado', id } = Astro.props;
+const { show, tag = 'Pasado', id, compact = false } = Astro.props;
 const ctaUrl = show.ticketUrl ?? show.infoUrl;
 const ctaLabel = show.ticketUrl ? 'Entradas' : 'Anuncio';
 const endLabel = show.endDate
@@ -27,10 +28,8 @@ const endLabel = show.endDate
     {show.venue} · {show.city}
     {show.ticketNote && <span class="show__notes">{show.ticketNote}</span>}
     {show.notes && <span class="show__notes">{show.notes}</span>}
-    {show.doorTime && <span class="show__notes">Puertas: <time datetime={show.doorTime}>{new Intl.DateTimeFormat('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }).format(new Date(show.doorTime))}</time></span>}
-    {show.startDate && <span class="show__notes">Comienzo: <time datetime={show.startDate}>{new Intl.DateTimeFormat('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }).format(new Date(show.startDate))}</time></span>}
-    {show.ticketPrice !== undefined && <span class="show__notes">Entrada: {show.ticketPrice === 0 ? 'gratis' : `${show.ticketPrice} €`}</span>}
-    {show.organizer && <span class="show__notes">Organiza: {show.organizer.name}</span>}
+    {!compact && show.doorTime && <span class="show__notes">Puertas: <time datetime={show.doorTime}>{new Intl.DateTimeFormat('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }).format(new Date(show.doorTime))}</time></span>}
+    {!compact && show.ticketPrice !== undefined && <span class="show__notes">Entrada: {show.ticketPrice === 0 ? 'gratis' : `${show.ticketPrice} €`}</span>}
     {show.endDate && <span class="show__notes">Finalización: <time datetime={show.endDate}>{endLabel}</time></span>}
   </span>
   {show.slug ? (
