@@ -35,11 +35,11 @@ export const releases: Release[] = [
       { title: 'Atardecer', duration: '3:22' },
       { title: 'Canción de amor adolescente', duration: '2:06' },
       { title: 'Mañana se acaba el mundo', duration: '7:44' },
-      { title: 'Entiéndeme (con kinss y deica)', duration: '2:16' },
+      { title: 'Entiéndeme (con kinss x deica)', duration: '2:16' },
     ],
     credits: [
-      'Grabado, mezclado y masterizado por deica durante 2024.',
-      'Con kinss y deica en Entiéndeme.',
+      'Todo el EP fue grabado, mezclado y masterizado en casa de deica durante 2024.',
+      'Con kinss x deica en Entiéndeme.',
     ],
     links: {
       spotify: 'https://open.spotify.com/album/7laXnCkDjHBuUPjJnX9U16',
@@ -63,7 +63,7 @@ export const releases: Release[] = [
       {
         title: 'Entiéndeme',
         date: '2025-01-04',
-        note: 'con kinss y deica',
+        note: 'con kinss x deica',
         cover: { file: coverEntiendeme, alt: 'Portada del single Entiéndeme: silueta de un perro dentro de una explosión cómic amarilla sobre papel verde con huellas' },
         links: { spotify: 'https://open.spotify.com/album/6RItaNJN4852THxFD22XQN' },
       },
