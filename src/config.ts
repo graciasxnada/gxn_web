@@ -42,6 +42,7 @@ export const LINKS = {
   spotify: 'https://open.spotify.com/artist/4PU43GQny4NK07FvQ3VLGs',
   instagram: 'https://www.instagram.com/graciasxnada_/',
   tiktok: 'https://www.tiktok.com/@graciasxnada_',
+  youtube: 'https://www.youtube.com/@graciasxnadagxn',
   liveVideo: 'https://youtu.be/y3B9V_Z0yWA',
   spotifyHandle: 'gracias x nada',
   instagramHandle: '@graciasxnada_',
@@ -69,7 +70,7 @@ export const NAV = [
 ];
 
 /** Canonical artist profiles confirmed by the band. */
-export const VERIFIED_ARTIST_PROFILES = [LINKS.spotify, LINKS.instagram, LINKS.tiktok];
+export const VERIFIED_ARTIST_PROFILES = [LINKS.spotify, LINKS.instagram, LINKS.tiktok, LINKS.youtube];
 
 /**
  * Optional switch for temporary deployments. Production builds should set
