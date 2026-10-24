@@ -23,6 +23,7 @@ const trackRecords = release.tracks.map((track, index) => ({
   '@type': 'MusicRecording',
   '@id': `${releaseUrl}#track-${index + 1}`,
   name: track.title,
+  ...(track.isrc ? { isrcCode: track.isrc } : {}),
   duration: `PT${Number(track.duration.split(':')[0])}M${Number(track.duration.split(':')[1])}S`,
   byArtist: { '@id': `${baseRoot.href}#artist` },
   inAlbum: { '@id': albumId },
@@ -31,8 +32,17 @@ const albumJsonLd = {
   '@type': 'MusicAlbum',
   '@id': albumId,
   name: release.title,
+  ...(release.upc ? { identifier: { '@type': 'PropertyValue', propertyID: 'UPC', value: release.upc } } : {}),
   datePublished: release.date,
-  musicReleaseFormat: 'https://schema.org/DigitalFormat',
+  albumRelease: {
+    '@type': 'MusicRelease',
+    '@id': `${releaseUrl}#digital-release`,
+    name: release.title,
+    releaseOf: { '@id': albumId },
+    musicReleaseFormat: 'https://schema.org/DigitalFormat',
+    datePublished: release.date,
+    ...(release.upc ? { identifier: { '@type': 'PropertyValue', propertyID: 'UPC', value: release.upc } } : {}),
+  },
   albumReleaseType: `https://schema.org/${{ ep: 'EPRelease', single: 'SingleRelease', album: 'AlbumRelease' }[release.type]}`,
   byArtist: { '@id': `${baseRoot.href}#artist` },
   numTracks: release.tracks.length,
@@ -64,6 +74,7 @@ const albumJsonLd = {
       </div>
       <div>
         <p class="mono">{release.code}</p>
+        {release.upc && <p class="mono">UPC: {release.upc}</p>}
         <p class="lede" style="margin-top: 0.6rem">{release.description}</p>
 
         <h2 class="kicker" style="margin-top: 2rem">Temas</h2>
@@ -76,6 +87,14 @@ const albumJsonLd = {
             </li>
           ))}
         </ol>
+        {release.tracks.some((track) => track.isrc) && (
+          <details style="margin-top: 1rem">
+            <summary class="mono">Códigos ISRC</summary>
+            <ul class="mono">
+              {release.tracks.filter((track) => track.isrc).map((track) => <li>{track.title}: {track.isrc}</li>)}
+            </ul>
+          </details>
+        )}
 
         {release.credits?.length > 0 && (
           <div style="margin-top: 1.8rem">

@@ -25,6 +25,11 @@ export const BAND = {
   description:
     'gracias x nada (GxN) es un trío de pop punk y skate punk de Vigo, Galicia, formado en 2022.',
   membersCount: 3,
+  members: [
+    { id: 'miguel', name: 'Miguel', instrument: 'bajo' },
+    { id: 'alberto', name: 'Alberto', instrument: 'guitarra' },
+    { id: 'david', name: 'David', instrument: 'batería' },
+  ],
 };
 
 export const SITE = {
@@ -60,6 +65,11 @@ export const CONTACT = {
 /** Biografía pública para medios; el material adicional se solicita por correo. */
 export const PRESS = {
   bioShort: BAND.description,
+  articles: [
+    { label: 'El primer EP de GxN', url: 'https://roucoson.com/2025/04/19/gxn-lanza-o-seu-primeiro-ep/' },
+    { label: 'Incomprendidos, nuestro primer single', url: 'https://roucoson.com/2024/11/07/incomprendidos-primeiro-sinxelo-de-gracias-por-nada/' },
+    { label: 'Crónica de la Noite Punk en SalaSon', url: 'https://roucoson.com/2023/01/17/asi-foi-a-noite-punk-da-salason-con-eskravos-trikornio-e-gracias-por-nada/' },
+  ],
 };
 
 export const NAV = [

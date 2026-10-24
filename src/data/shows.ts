@@ -16,10 +16,16 @@
  */
 
 import type { DatePrecision, Show } from '../types';
+import { BAND, SITE_ROOT } from '../config';
 
 export const upcoming: Show[] = [
   {
     slug: 'sala-moon-2026-11-13',
+    doorTime: '2026-11-13T21:00:00+01:00',
+    startDate: '2026-11-13T21:30:00+01:00',
+    address: { streetAddress: 'R. da República Arxentina, 35', postalCode: '15701', addressRegion: 'A Coruña' },
+    ticketPrice: 9,
+    organizer: { name: BAND.name, url: SITE_ROOT },
     date: '2026-11-13',
     datePrecision: 'day',
     venue: 'Sala Moon',

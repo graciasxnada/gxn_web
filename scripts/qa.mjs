@@ -136,6 +136,20 @@ for (const file of htmlFiles) {
     check(band?.description === BAND.description && JSON.stringify(band?.genre) === JSON.stringify(['Pop Punk', 'Skate Punk']), `${page}: descripción o género de MusicGroup incorrectos.`);
     check(band?.foundingLocation?.name === BAND.origin, `${page}: origen de MusicGroup incorrecto.`);
   check(band?.url === SITE_ROOT, `${page}: MusicGroup.url incorrecta.`);
+    check(band?.alternateName === BAND.short, `${page}: falta el alias de la banda.`);
+    check(band?.email === CONTACT.email, `${page}: contacto de MusicGroup incorrecto.`);
+    check(band?.member?.length === BAND.members.length && BAND.members.every((member) => {
+      const personId = `${SITE_ROOT}#member-${member.id}`;
+      const person = entities.find((data) => data['@id'] === personId);
+      return person?.['@type'] === 'Person' && person.name === member.name
+        && person.memberOf?.['@id'] === band['@id']
+        && band.member.some((role) => role['@type'] === 'OrganizationRole'
+          && role.roleName === member.instrument && role.member?.['@id'] === personId);
+    }), `${page}: integrantes o instrumentos incorrectos en MusicGroup.`);
+    const bandPhoto = entities.find((data) => data['@id'] === `${SITE_ROOT}#band-photo`);
+    check(bandPhoto?.['@type'] === 'ImageObject' && bandPhoto.contentUrl === band?.image
+      && bandPhoto.width > 0 && bandPhoto.height > 0
+      && bandPhoto.about?.['@id'] === band?.['@id'], `${page}: fotografía de la banda incompleta.`);
     check(JSON.stringify(band?.sameAs) === JSON.stringify(socialUrls), `${page}: MusicGroup.sameAs debe contener solo los perfiles verificados.`);
   if (band?.image) verifyLocal(band.image, current, `${page} MusicGroup.image`);
     const website = entities.find((data) => data['@type'] === 'WebSite');
@@ -165,7 +179,7 @@ for (const file of htmlFiles) {
       check(events.length === 1, `${page}: debe contener exactamente un MusicEvent.`);
       const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
       check(events.every((event) => {
-        const [year, month, day] = event.startDate.split('-');
+        const [year, month, day] = event.startDate.split('T')[0].split('-');
         const visibleDate = `${Number(day)} ${monthNames[Number(month) - 1]} ${year}`;
         return html.includes(event.location?.name) && html.includes(visibleDate);
       }), `${page}: datos MusicEvent distintos del concierto visible.`);

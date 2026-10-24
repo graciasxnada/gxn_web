@@ -5,7 +5,7 @@ import PosterViewer from '../../components/PosterViewer.astro';
 import { upcoming, past, formatDate } from '../../data/shows';
 import type { Show } from '../../types';
 import { BAND, SITE, SITE_INDEXABLE } from '../../config';
-import { href } from '../../lib';
+import { href, baseDir } from '../../lib';
 import bandFoto from '../../assets/img/band-foto.webp';
 import { livePhotos } from '../../data/livePhotos';
 
@@ -16,7 +16,7 @@ export const getStaticPaths = (() => [...upcoming, ...past]
 interface Props { show: Show }
 const { show } = Astro.props;
 const gallery = show.photoGallery ? livePhotos[show.photoGallery] : undefined;
-const siteBase = new URL(import.meta.env.BASE_URL, Astro.site?.href ?? SITE.url + '/');
+const siteBase = new URL(baseDir(), Astro.site?.href ?? SITE.url + '/');
 const eventUrl = new URL(href(`directo/${show.slug}/`), siteBase).href;
 const eventId = `${eventUrl}#event`;
 const title = `${BAND.name} en ${show.venue}`;
@@ -28,9 +28,13 @@ const eventJsonLd = {
   name: BAND.name,
   description,
   image: [new URL(show.poster ? href(show.poster.src) : gallery?.photos[0]?.src ?? bandFoto.src, siteBase).href],
-  startDate: show.date,
+  startDate: show.startDate ?? show.date,
+  ...(show.doorTime ? { doorTime: show.doorTime } : {}),
   ...(show.endDate ? { endDate: show.endDate } : {}),
-  ...(show.organizer ? { organizer: { '@type': 'Organization', ...show.organizer } } : {}),
+  ...(show.organizer ? { organizer: {
+    ...(show.organizer.url === siteBase.href ? { '@id': `${siteBase.href}#artist` } : { '@type': 'Organization' }),
+    ...show.organizer,
+  } } : {}),
   ...(show.ticketPrice !== undefined ? {
     offers: {
       '@type': 'Offer',
@@ -44,7 +48,7 @@ const eventJsonLd = {
   location: {
     '@type': 'Place',
     name: show.venue,
-    address: { '@type': 'PostalAddress', addressLocality: show.city, addressCountry: 'ES' },
+    address: { '@type': 'PostalAddress', ...show.address, addressLocality: show.city, addressCountry: 'ES' },
   },
   performer: { '@id': `${siteBase.href}#artist` },
 };
@@ -53,7 +57,13 @@ const endLabel = show.endDate ? new Intl.DateTimeFormat('es-ES', {
   ...(show.endDate.includes('T') ? { timeStyle: 'short' as const } : {}),
   timeZone: 'Europe/Madrid',
 }).format(new Date(show.endDate)) : undefined;
+const doorLabel = show.doorTime ? new Intl.DateTimeFormat('es-ES', {
+  hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid',
+}).format(new Date(show.doorTime)) : undefined;
 const dateParts = formatDate(show.date, show.datePrecision).split(' ');
+const startLabel = show.startDate ? new Intl.DateTimeFormat('es-ES', {
+  hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid',
+}).format(new Date(show.startDate)) : undefined;
 const hasExactDay = show.datePrecision !== 'month';
 const isPast = past.some((entry) => entry.slug === show.slug);
 ---
@@ -77,11 +87,12 @@ const isPast = past.some((entry) => entry.slug === show.slug);
           <p class="kicker">{isPast ? 'Concierto pasado' : 'En directo'}</p>
           <p class="event__venue">{show.venue}</p>
           <p class="event__city">{show.city}</p>
+          {show.address && <p>{show.address.streetAddress}, {show.address.postalCode} {show.city}, {show.address.addressRegion}</p>}
         </div>
       </div>
       <h1>{BAND.name}</h1>
       {show.notes && <p class="event__lineup">{show.notes}</p>}
-      {(show.ticketNote || show.ticketPrice !== undefined || show.organizer || show.endDate) && (
+      {(show.ticketNote || show.ticketPrice !== undefined || show.organizer || show.endDate || show.doorTime || show.startDate) && (
         <div class="event__practical">
           {(show.ticketNote || show.ticketPrice !== undefined) && (
             <div>
@@ -90,7 +101,9 @@ const isPast = past.some((entry) => entry.slug === show.slug);
               {show.ticketPrice !== undefined && <p class="event__price">{show.ticketPrice === 0 ? 'Gratis' : `${show.ticketPrice} €`}</p>}
             </div>
           )}
-          {(show.organizer || show.endDate) && <dl class="event__extra">
+          {(show.organizer || show.endDate || show.doorTime || show.startDate) && <dl class="event__extra">
+            {show.doorTime && <div><dt>Apertura de puertas</dt><dd><time datetime={show.doorTime}>{doorLabel}</time></dd></div>}
+            {show.startDate && <div><dt>Comienzo</dt><dd><time datetime={show.startDate}>{startLabel}</time></dd></div>}
             {show.organizer && <div><dt>Organiza</dt><dd>{show.organizer.name}</dd></div>}
             {show.endDate && <div><dt>Finalización</dt><dd><time datetime={show.endDate}>{endLabel}</time></dd></div>}
           </dl>}

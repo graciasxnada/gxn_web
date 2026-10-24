@@ -31,11 +31,11 @@ export const releases: Release[] = [
     description:
       'Primer EP de gracias x nada. Cinco canciones de pop punk melódico, dos voces que se pasan el micrófono y guitarras que van a fondo. De los dos minutos de Canción de amor adolescente a los casi ocho de Mañana se acaba el mundo.',
     tracks: [
-      { title: 'Incomprendidos', duration: '3:36' },
-      { title: 'Atardecer', duration: '3:22' },
-      { title: 'Canción de amor adolescente', duration: '2:06' },
-      { title: 'Mañana se acaba el mundo', duration: '7:44' },
-      { title: 'Entiéndeme (con kinss x deica)', duration: '2:16' },
+      { title: 'Incomprendidos', duration: '3:36', isrc: 'USY242420182' },
+      { title: 'Atardecer', duration: '3:22', isrc: 'USHM22507938' },
+      { title: 'Canción de amor adolescente', duration: '2:06', isrc: 'USY242479993' },
+      { title: 'Mañana se acaba el mundo', duration: '7:44', isrc: 'USHM22507939' },
+      { title: 'Entiéndeme (con kinss x deica)', duration: '2:16', isrc: 'USCGH2529719' },
     ],
     credits: [
       'Todo el EP fue grabado, mezclado y masterizado en casa de deica durante 2024.',
@@ -45,6 +45,7 @@ export const releases: Release[] = [
       spotify: 'https://open.spotify.com/album/7laXnCkDjHBuUPjJnX9U16',
     },
     code: 'GXN 001',
+    upc: '7300346703447',
     // Singles de adelanto publicados antes del EP (sin código de catálogo).
     adelantos: [
       {

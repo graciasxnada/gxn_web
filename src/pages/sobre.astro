@@ -2,12 +2,14 @@
 import Base from '../layouts/Base.astro';
 import { href } from '../lib';
 import bandFoto from '../assets/img/band-foto.webp';
+import { BAND, PRESS, SITE_ROOT } from '../config';
 ---
 
 <Base
   title="Sobre la banda"
   description="gracias x nada (GxN) es un trío de pop punk y skate punk de Vigo, Galicia, formado en 2022. Aquí puedes leer su historia y lo que caracteriza su música."
   breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Sobre la banda' }]}
+  mainEntityId={`${SITE_ROOT}#artist`}
 >
   <section class="page-head wrap">
     <p class="kicker">Sobre</p>
@@ -25,8 +27,9 @@ import bandFoto from '../assets/img/band-foto.webp';
           aguantan desde la primera escucha.
         </p>
         <p>
-          La banda la forman <strong>Miguel al bajo</strong>,
-          <strong>Alberto a la guitarra</strong> y <strong>David a la batería</strong>.
+          La banda la forman {BAND.members.map((member, index) => (
+            <>{index === 0 ? '' : index === BAND.members.length - 1 ? ' y ' : ', '}<strong>{member.name} {member.instrument === 'bajo' ? 'al' : 'a la'} {member.instrument}</strong></>
+          ))}.
         </p>
         <p>
           Dos voces se reparten los versos. Los estribillos son de quien los cante.
@@ -71,5 +74,13 @@ import bandFoto from '../assets/img/band-foto.webp';
       <div><dt>Idiomas de las canciones</dt><dd>Castellano · Gallego</dd></div>
       <div><dt>Últimos pasos</dt><dd>EP «GxN» (2025)</dd></div>
     </dl>
+    <section style="margin-top: 2rem" aria-labelledby="press-title">
+      <h2 id="press-title" class="kicker">En la prensa · Rouco Son</h2>
+      <ul>
+        {PRESS.articles.map((article) => (
+          <li><a href={article.url} target="_blank" rel="noopener noreferrer">{article.label} ↗</a></li>
+        ))}
+      </ul>
+    </section>
   </section>
 </Base>
