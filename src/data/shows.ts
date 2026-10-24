@@ -71,6 +71,7 @@ export const past: Show[] = [
   },
   {
     slug: 'ocean-rock-bar-2026-08-14',
+    infoUrl: 'https://www.instagram.com/p/DbposJKAm5a/?img_index=1',
     photoGallery: 'orb14',
     date: '2026-08-14',
     datePrecision: 'day',
@@ -87,6 +88,7 @@ export const past: Show[] = [
   {
     date: '2026-07-22',
     slug: 'sala-mardi-gras-2026-07-22',
+    infoUrl: 'https://www.instagram.com/p/DaQbXyiCINF/',
     photoGallery: 'mdg',
     datePrecision: 'day',
     venue: 'Sala Mardi Gras',
