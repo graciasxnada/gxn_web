@@ -1,6 +1,7 @@
 ---
 import { formatDate } from '../data/shows';
 import type { Show } from '../types';
+import { href } from '../lib';
 
 interface Props {
   show: Show;
@@ -11,6 +12,13 @@ interface Props {
 const { show, tag = 'Pasado', id } = Astro.props;
 const ctaUrl = show.ticketUrl ?? show.infoUrl;
 const ctaLabel = show.ticketUrl ? 'Entradas' : 'Anuncio';
+const endLabel = show.endDate
+  ? new Intl.DateTimeFormat('es-ES', {
+      dateStyle: 'long',
+      ...(show.endDate.includes('T') ? { timeStyle: 'short' as const } : {}),
+      timeZone: 'Europe/Madrid',
+    }).format(new Date(show.endDate))
+  : undefined;
 ---
 
 <li class="show" id={id}>
@@ -19,8 +27,13 @@ const ctaLabel = show.ticketUrl ? 'Entradas' : 'Anuncio';
     {show.venue} · {show.city}
     {show.ticketNote && <span class="show__notes">{show.ticketNote}</span>}
     {show.notes && <span class="show__notes">{show.notes}</span>}
+    {show.ticketPrice !== undefined && <span class="show__notes">Entrada: {show.ticketPrice === 0 ? 'gratis' : `${show.ticketPrice} €`}</span>}
+    {show.organizer && <span class="show__notes">Organiza: {show.organizer.name}</span>}
+    {show.endDate && <span class="show__notes">Finalización: <time datetime={show.endDate}>{endLabel}</time></span>}
   </span>
-  {ctaUrl ? (
+  {show.slug ? (
+    <a class="show__tag show__tag--link" href={href(`directo/${show.slug}/`)}>Ver concierto →</a>
+  ) : ctaUrl ? (
     <a
       class="show__tag show__tag--link"
       href={ctaUrl}

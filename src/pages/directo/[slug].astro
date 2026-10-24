@@ -1,0 +1,168 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PosterViewer from '../../components/PosterViewer.astro';
+import { upcoming, past, formatDate } from '../../data/shows';
+import type { Show } from '../../types';
+import { BAND, SITE, SITE_INDEXABLE } from '../../config';
+import { href } from '../../lib';
+import bandFoto from '../../assets/img/band-foto.webp';
+import { livePhotos } from '../../data/livePhotos';
+
+export const getStaticPaths = (() => [...upcoming, ...past]
+  .filter((show) => show.slug)
+  .map((show) => ({ params: { slug: show.slug }, props: { show } }))) satisfies GetStaticPaths;
+
+interface Props { show: Show }
+const { show } = Astro.props;
+const gallery = show.photoGallery ? livePhotos[show.photoGallery] : undefined;
+const siteBase = new URL(import.meta.env.BASE_URL, Astro.site?.href ?? SITE.url + '/');
+const eventUrl = new URL(href(`directo/${show.slug}/`), siteBase).href;
+const eventId = `${eventUrl}#event`;
+const title = `${BAND.name} en ${show.venue}`;
+const description = `${BAND.name} en directo${show.notes ? ` ${show.notes}` : ''}.${show.ticketNote ? ` ${show.ticketNote}.` : ''}`;
+const eventJsonLd = {
+  '@type': 'MusicEvent',
+  '@id': eventId,
+  url: eventUrl,
+  name: BAND.name,
+  description,
+  image: [new URL(show.poster ? href(show.poster.src) : gallery?.photos[0]?.src ?? bandFoto.src, siteBase).href],
+  startDate: show.date,
+  ...(show.endDate ? { endDate: show.endDate } : {}),
+  ...(show.organizer ? { organizer: { '@type': 'Organization', ...show.organizer } } : {}),
+  ...(show.ticketPrice !== undefined ? {
+    offers: {
+      '@type': 'Offer',
+      price: show.ticketPrice,
+      priceCurrency: 'EUR',
+      ...(show.ticketUrl ? { url: show.ticketUrl } : {}),
+    },
+  } : {}),
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: {
+    '@type': 'Place',
+    name: show.venue,
+    address: { '@type': 'PostalAddress', addressLocality: show.city, addressCountry: 'ES' },
+  },
+  performer: { '@id': `${siteBase.href}#artist` },
+};
+const endLabel = show.endDate ? new Intl.DateTimeFormat('es-ES', {
+  dateStyle: 'long',
+  ...(show.endDate.includes('T') ? { timeStyle: 'short' as const } : {}),
+  timeZone: 'Europe/Madrid',
+}).format(new Date(show.endDate)) : undefined;
+const dateParts = formatDate(show.date, show.datePrecision).split(' ');
+const hasExactDay = show.datePrecision !== 'month';
+const isPast = past.some((entry) => entry.slug === show.slug);
+---
+
+<Base
+  title={`${title} · ${formatDate(show.date, show.datePrecision)}`}
+  description={`${title}, ${show.city}, el ${formatDate(show.date, show.datePrecision)}. ${description}`}
+  breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Directo', href: '/directo/' }, { label: show.venue }]}
+  pageJsonLd={SITE_INDEXABLE ? [eventJsonLd] : []}
+  mainEntityId={SITE_INDEXABLE ? eventId : undefined}
+>
+  <section class:list={['wrap', 'event', { 'event--with-poster': show.poster }]} aria-label="Información del concierto">
+    <div class="event__content">
+      <div class="event__when-where">
+        <time class="event__date" datetime={show.date} aria-label={formatDate(show.date, show.datePrecision)}>
+          {hasExactDay && <span class="event__day">{dateParts[0]}</span>}
+          <span class="event__month">{dateParts[hasExactDay ? 1 : 0]}</span>
+          <span class="event__year">{dateParts[hasExactDay ? 2 : 1]}</span>
+        </time>
+        <div class="event__location">
+          <p class="kicker">{isPast ? 'Concierto pasado' : 'En directo'}</p>
+          <p class="event__venue">{show.venue}</p>
+          <p class="event__city">{show.city}</p>
+        </div>
+      </div>
+      <h1>{BAND.name}</h1>
+      {show.notes && <p class="event__lineup">{show.notes}</p>}
+      {(show.ticketNote || show.ticketPrice !== undefined || show.organizer || show.endDate) && (
+        <div class="event__practical">
+          {(show.ticketNote || show.ticketPrice !== undefined) && (
+            <div>
+              <h2 class="kicker">Entradas</h2>
+              {show.ticketNote && <p class="event__admission">{show.ticketNote}</p>}
+              {show.ticketPrice !== undefined && <p class="event__price">{show.ticketPrice === 0 ? 'Gratis' : `${show.ticketPrice} €`}</p>}
+            </div>
+          )}
+          {(show.organizer || show.endDate) && <dl class="event__extra">
+            {show.organizer && <div><dt>Organiza</dt><dd>{show.organizer.name}</dd></div>}
+            {show.endDate && <div><dt>Finalización</dt><dd><time datetime={show.endDate}>{endLabel}</time></dd></div>}
+          </dl>}
+        </div>
+      )}
+      <div class="event__actions">
+        {show.ticketUrl && <a class="sticker" href={show.ticketUrl} target="_blank" rel="noopener noreferrer">Entradas ↗</a>}
+        {show.infoUrl && <a class:list={['sticker', { 'sticker--dark': show.ticketUrl }]} href={show.infoUrl} target="_blank" rel="noopener noreferrer">Anuncio del concierto ↗</a>}
+      </div>
+    </div>
+    {show.poster && <PosterViewer {...show.poster} src={href(show.poster.src)} />}
+    <a class="text-link mono event__back" href={href('/directo/')}>← Todas las fechas</a>
+  </section>
+  {gallery && gallery.photos.length > 0 && (
+    <section class="wrap event-gallery" aria-labelledby="event-photos-title">
+      <h2 id="event-photos-title" class="section-title">Fotos del concierto</h2>
+      <div class="fotos">
+        {gallery.photos.map((photo, index) => (
+          <img src={photo.src} width={photo.width} height={photo.height} alt={`${gallery.alt}. Foto ${index + 1}`} loading="lazy" decoding="async" />
+        ))}
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .event-gallery { padding-bottom: var(--section-gap); }
+  .event-gallery .fotos { margin-top: 2rem; }
+  .event {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
+  }
+  .event--with-poster { grid-template-columns: minmax(0, 1fr) 220px; column-gap: clamp(2rem, 6vw, 6rem); }
+  .event__content { min-width: 0; }
+  .event__when-where { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
+  .event__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 6rem;
+    padding: 0.7rem 1rem;
+    border: 2px solid var(--ink);
+    background: var(--yellow);
+    line-height: 1;
+  }
+  .event__day { font-size: 3.4rem; font-weight: 900; letter-spacing: -0.05em; }
+  .event__month, .event__year { font-family: var(--font-mono); font-size: 0.72rem; }
+  .event__month { text-transform: uppercase; font-weight: 700; margin-top: 0.3rem; }
+  .event__year { margin-top: 0.35rem; }
+  .event__location .kicker { margin-bottom: 0.45rem; }
+  .event__venue { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 850; margin: 0; line-height: 1.1; }
+  .event__city { margin: 0.4rem 0 0; }
+  .event h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); text-wrap: balance; }
+  .event__lineup { font-size: clamp(1.1rem, 2vw, 1.4rem); margin: 0.9rem 0 0; }
+  .event__practical { border-top: 2px solid var(--ink); margin-top: 2rem; padding-top: 1.25rem; }
+  .event__practical .kicker { margin-bottom: 0.4rem; }
+  .event__admission { font-size: 1.15rem; font-weight: 750; margin: 0; }
+  .event__price { margin: 0.4rem 0 0; }
+  .event__extra { margin: 1rem 0 0; }
+  .event__extra > div { margin-top: 0.75rem; }
+  .event__extra dt { font-family: var(--font-mono); font-size: 0.75rem; }
+  .event__extra dd { margin: 0.2rem 0 0; }
+  .event__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+  .event__back { grid-column: 1 / -1; justify-self: start; font-size: 0.8rem; }
+  @media (max-width: 820px) {
+    .event--with-poster { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 400px) {
+    .event__when-where { gap: 1rem; }
+    .event__date { min-width: 5rem; padding-inline: 0.65rem; }
+    .event__day { font-size: 3rem; }
+  }
+</style>

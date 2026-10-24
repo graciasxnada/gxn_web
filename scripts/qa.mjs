@@ -158,13 +158,27 @@ for (const file of htmlFiles) {
       if (album?.image) verifyLocal(album.image, current, `${page} MusicAlbum.image`);
   }
     if (page === 'directo/index.html') {
+      check(!entities.some((data) => data['@type'] === 'MusicEvent'), `${page}: MusicEvent debe estar en la página individual.`);
+    }
+    if (page.startsWith('directo/') && page !== 'directo/index.html' && SITE_INDEXABLE) {
       const events = entities.filter((data) => data['@type'] === 'MusicEvent');
+      check(events.length === 1, `${page}: debe contener exactamente un MusicEvent.`);
       const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
       check(events.every((event) => {
         const [year, month, day] = event.startDate.split('-');
         const visibleDate = `${Number(day)} ${monthNames[Number(month) - 1]} ${year}`;
         return html.includes(event.location?.name) && html.includes(visibleDate);
       }), `${page}: datos MusicEvent distintos del concierto visible.`);
+      for (const event of events) {
+        check(event.url === canonical && event['@id'] === `${canonical}#event`, `${page}: URL del evento distinta de canonical.`);
+        check(webpage?.mainEntity?.['@id'] === event['@id'], `${page}: el evento debe ser la entidad principal.`);
+        check(typeof event.description === 'string' && event.description.length > 0, `${page}: falta descripción del concierto.`);
+        check(Array.isArray(event.image) && event.image.length > 0, `${page}: falta imagen del concierto.`);
+        for (const image of event.image ?? []) verifyLocal(image, current, `${page} MusicEvent.image`);
+        if (event.offers) {
+          check(typeof event.offers.price === 'number' && event.offers.price >= 0 && event.offers.priceCurrency === 'EUR', `${page}: precio de entradas inválido.`);
+        }
+      }
     }
 }
 

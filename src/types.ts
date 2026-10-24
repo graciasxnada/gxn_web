@@ -1,4 +1,5 @@
 import type { ImageMetadata } from 'astro';
+import type { livePhotos } from './data/livePhotos';
 
 export interface Cover {
   file: ImageMetadata;
@@ -32,6 +33,8 @@ export interface Release {
 export type DatePrecision = 'day' | 'month';
 
 export interface Show {
+  photoGallery?: keyof typeof livePhotos;
+  slug?: string;
   date: string;
   datePrecision?: DatePrecision;
   venue: string;
@@ -40,4 +43,8 @@ export interface Show {
   ticketUrl?: string | null;
   ticketNote?: string;
   infoUrl?: string;
+  endDate?: string;
+  organizer?: { name: string; url?: string };
+  ticketPrice?: number;
+  poster?: { src: string; alt: string; width: number; height: number };
 }

@@ -1,57 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
-import type { ImageMetadata } from 'astro';
 import Starburst from '../components/Starburst.astro';
 import ShowItem from '../components/ShowItem.astro';
 import { upcoming, past } from '../data/shows';
 import { href } from '../lib';
-import { BAND, LINKS, SITE, SITE_INDEXABLE } from '../config';
+import { LINKS } from '../config';
+import { livePhotos } from '../data/livePhotos';
+
 
 const hrefInstagram = LINKS.instagram;
-const siteBase = new URL(import.meta.env.BASE_URL, Astro.site?.href ?? SITE.url + '/');
-const eventJsonLd = upcoming.map((show, index) => ({
-  '@type': 'MusicEvent',
-  '@id': new URL(`directo/#evento-${show.date}-${index + 1}`, siteBase).href,
-  name: `${BAND.name} en ${show.venue}`,
-  startDate: show.date,
-  eventStatus: 'https://schema.org/EventScheduled',
-  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  location: {
-    '@type': 'Place',
-    name: show.venue,
-    address: { '@type': 'PostalAddress', addressLocality: show.city, addressCountry: 'ES' },
-  },
-  performer: { '@id': `${siteBase.href}#artist` },
-  ...(show.infoUrl ? { url: show.infoUrl } : {}),
-}));
-
-// Imágenes de directo — suelta webp en src/assets/img/directo/ y aparecen aquí.
-const fotos = import.meta.glob<ImageMetadata>('../assets/img/directo/*.webp', { eager: true, import: 'default' });
-const pick = (prefix: string) =>
-  Object.keys(fotos)
-    .filter((k) => k.includes('/' + prefix + '-'))
-    .sort()
-    .map((k) => fotos[k]);
-
-const gruposFotos = [
-  {
-    titulo: 'Ocean Rock Bar · Vigo · agosto 2026',
-    alt: 'gracias x nada en directo en el Ocean Rock Bar de Vigo, agosto de 2026',
-    fotos: pick('orb'),
-  },
-  {
-    titulo: 'Sala Mardi Gras · A Coruña · 22.07.2026',
-    alt: 'gracias x nada en directo en la Sala Mardi Gras de A Coruña, 22 de julio de 2026',
-    fotos: pick('mdg'),
-  },
-];
+const gruposFotos = Object.values(livePhotos);
 ---
 
 <Base
   title="Directo"
   description="Conciertos de gracias x nada: próximas fechas y conciertos pasados en salas como SalaSon, Sala Moon, El Contrabajo o Sala Mardi Gras."
   breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Directo' }]}
-  pageJsonLd={SITE_INDEXABLE ? eventJsonLd : []}
+
 >
   <section class="page-head wrap">
     <p class="kicker">Directo</p>
@@ -101,9 +66,9 @@ const gruposFotos = [
       <h2 id="fotos-title" class="section-title">Fotos de directo</h2>
       {gruposFotos.map((grupo) => (
         <div style="margin-top: 1.4rem">
-          <h3 class="kicker">{grupo.titulo}</h3>
+          <h3 class="kicker">{grupo.title}</h3>
           <div class="fotos">
-            {grupo.fotos.map((foto) => (
+            {grupo.photos.map((foto) => (
               <img
                 src={foto.src}
                 width={foto.width}
