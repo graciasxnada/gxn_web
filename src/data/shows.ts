@@ -28,7 +28,7 @@ export const upcoming: Show[] = [
     poster: {
       src: '/carteles/moon13nov.jpeg',
       width: 1182,
-      height: 2560,
+      height: 1779,
       alt: 'Cartel de Fuego Lolita, Martes Mal y gracias x nada en Sala Moon, Santiago de Compostela, el 13 de noviembre',
     },
     ticketUrl: null, // sin venta online: solo entradas en puerta
