@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="12" fill="#2fae4a"/>
-  <path d="M50 4 L58 23 L71 10 L73 29 L90 21 L85 40 L96 46 L84 56 L97 66 L78 68 L87 87 L67 80 L64 96 L52 81 L39 96 L36 79 L14 87 L24 67 L4 65 L17 55 L2 45 L13 39 L7 20 L26 27 L28 10 L42 23 Z"
-        fill="#ffe34b" stroke="#14140f" stroke-width="4" stroke-linejoin="round"/>
-  <text x="50" y="63" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="28" fill="#e8262d" text-anchor="middle" stroke="#14140f" stroke-width="1.6" paint-order="stroke">GXN</text>
-</svg>
