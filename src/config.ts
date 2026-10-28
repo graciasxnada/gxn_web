@@ -80,7 +80,13 @@ export const NAV = [
 ];
 
 /** Canonical artist profiles confirmed by the band. */
-export const VERIFIED_ARTIST_PROFILES = [LINKS.spotify, LINKS.instagram, LINKS.tiktok, LINKS.youtube];
+export const VERIFIED_ARTIST_PROFILES = [
+  LINKS.spotify,
+  LINKS.instagram,
+  LINKS.tiktok,
+  LINKS.youtube,
+  'https://musicbrainz.org/artist/77c48fd4-cacd-44fb-aa37-05542829275e',
+];
 
 /**
  * Optional switch for temporary deployments. Production builds should set
