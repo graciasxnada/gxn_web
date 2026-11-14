@@ -17,7 +17,9 @@
 
 import type { DatePrecision, Show } from '../types';
 
-export const upcoming: Show[] = [
+export const upcoming: Show[] = [];
+
+export const past: Show[] = [
   {
     slug: 'sala-moon-2026-11-13',
     doorTime: '2026-11-13T21:00:00+01:00',
@@ -41,9 +43,6 @@ export const upcoming: Show[] = [
     ticketNote: 'Entradas solo en puerta',
     infoUrl: 'https://www.instagram.com/p/Degk1pFCm42/', // post de anuncio
   },
-];
-
-export const past: Show[] = [
   {
     slug: 'chiringo-do-mundo-2026-08-28',
     date: '2026-08-28',

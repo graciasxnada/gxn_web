@@ -13,14 +13,14 @@ import bandFoto from '../assets/img/band-foto.webp';
 const next = upcoming[0];
 const nextShow = next ?? null;
 
-// Cinta bajo el hero: el próximo concierto (o el nombre si no hay fechas).
+// Cinta bajo el hero: el próximo concierto o un aviso si no hay fechas.
 const cintaProximo = nextShow
   ? [
       `Próximo bolo · ${formatShowDate(nextShow.date, nextShow.datePrecision)}`,
       `${nextShow.venue} · ${nextShow.city}`,
       ...(nextShow.ticketNote ? [nextShow.ticketNote] : []),
     ]
-  : ['gracias × nada'];
+  : ['Pronto anunciaremos nuevos conciertos.'];
 ---
 
 <Base isHome>
@@ -147,7 +147,7 @@ const cintaProximo = nextShow
         <div class="empty">
           <Starburst class="empty__star" />
           <p class="lede" style="margin: 0 0 0.6rem">
-            No hay fechas anunciadas... todavía.
+            Pronto anunciaremos nuevos conciertos.
           </p>
           <p class="mono">Sala, promotor o festival: para traer GxN a tu escenario, escríbenos.</p>
           <p style="margin-top: 1rem; display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap">
